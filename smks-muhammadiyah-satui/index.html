@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en" class="transition-colors duration-300 ease-in-out">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SMKS Muhammadiyah Satui</title>
+    <!-- Tailwind CSS CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Poppins:wght@400;600;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- GSAP CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+    <!-- AOS CDN -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <!-- Lottie CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.7.8/lottie.min.js"></script>
+    <!-- Locomotive Scroll CDN -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/locomotive-scroll@3.5.4/dist/locomotive-scroll.css">
+    <script src="https://cdn.jsdelivr.net/npm/locomotive-scroll@3.5.4/dist/locomotive-scroll.min.js"></script>
+</head>
+<body>
+    <div id="scroll-indicator" class="fixed top-0 left-0 h-1 bg-yellow-500 z-50" style="width: 0%;"></div>
+    <button id="theme-toggle" class="fixed top-4 right-4 p-2 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 shadow-md z-50">
+        <i id="theme-toggle-icon-light" data-lucide="sun" class="w-6 h-6"></i>
+        <i id="theme-toggle-icon-dark" data-lucide="moon" class="w-6 h-6 hidden"></i>
+    </button>
+
+    <section id="hero" class="h-screen flex flex-col justify-center items-center bg-gray-200 dark:bg-gray-800 text-white relative overflow-hidden">
+        <div id="hero-background" class="absolute inset-0 w-full h-full bg-cover bg-center z-0" style="background-image: url('https://via.placeholder.com/1920x1080/4A90E2/FFFFFF?Text=School+Background+Image');"></div>
+        <div id="hero-content" class="relative z-10 text-center p-8">
+            {/* Assuming text-white is desired for hero text in both modes due to potential dark image/video bg */}
+            <h1 id="hero-title" class="text-5xl font-bold mb-4 opacity-0 transform translate-y-10 text-white">SMKS Muhammadiyah Satui</h1>
+            <p id="hero-slogan" class="text-2xl opacity-0 transform translate-y-10 delay-500 text-white">Sekolah Pusat Keunggulan</p>
+            <a href="#visi-misi" id="scroll-down-button" class="mt-8 inline-block bg-yellow-500 text-gray-900 font-semibold px-8 py-3 rounded-lg shadow-md hover:bg-yellow-400 hover:shadow-lg transform hover:scale-105 transition-all duration-300 ease-in-out opacity-0 translate-y-10 dark:bg-yellow-600 dark:text-gray-100 dark:hover:bg-yellow-500">
+                Jelajahi Lebih Lanjut <i data-lucide="arrow-down" class="inline-block ml-2"></i>
+            </a>
+        </div>
+    </section>
+
+    <section id="visi-misi" class="py-16 bg-white dark:bg-gray-900">
+        <div class="container mx-auto px-6">
+            <h2 class="text-3xl font-bold text-center mb-12 text-gray-800 dark:text-gray-100" data-aos="fade-up">Visi & Misi</h2>
+            <div class="flex flex-wrap -mx-4">
+                <div class="w-full md:w-1/2 px-4 mb-8 md:mb-0" data-aos="fade-right" data-aos-delay="200">
+                    <h3 class="text-2xl font-semibold text-blue-700 dark:text-blue-400 mb-4">Visi</h3>
+                    <p class="text-gray-600 dark:text-gray-300 leading-relaxed">
+                        Menjadi lembaga pendidikan kejuruan yang unggul, inovatif, dan berkarakter Islami, serta menghasilkan lulusan yang kompeten dan siap bersaing di era global. (Placeholder Visi)
+                    </p>
+                </div>
+                <div class="w-full md:w-1/2 px-4" data-aos="fade-left" data-aos-delay="400">
+                    <h3 class="text-2xl font-semibold text-blue-700 dark:text-blue-400 mb-4">Misi</h3>
+                    <ul class="list-disc list-inside text-gray-600 dark:text-gray-300 leading-relaxed">
+                        <li>Menyelenggarakan pendidikan berkualitas yang relevan dengan kebutuhan industri. (Placeholder Misi 1)</li>
+                        <li>Mengembangkan potensi peserta didik secara optimal melalui pembelajaran kreatif. (Placeholder Misi 2)</li>
+                        <li>Membentuk pribadi yang berakhlak mulia dan berjiwa wirausaha. (Placeholder Misi 3)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="sejarah" class="py-16 bg-gray-50 dark:bg-gray-800">
+        <div class="container mx-auto px-6">
+            <h2 class="text-3xl font-bold text-center mb-12 text-gray-800 dark:text-gray-100" data-aos="fade-up">Sejarah Sekolah</h2>
+            <div class="flex flex-wrap items-center">
+                <div class="w-full md:w-1/2 px-4" data-aos="zoom-in" data-aos-delay="200">
+                    <p class="text-gray-600 dark:text-gray-300 leading-relaxed mb-4">
+                        SMKS Muhammadiyah Satui didirikan pada tahun XXXX dengan tujuan untuk memberikan pendidikan kejuruan yang berkualitas bagi masyarakat Satui dan sekitarnya. Sejak awal berdirinya, sekolah kami telah berkomitmen untuk... (Placeholder Sejarah)
+                    </p>
+                    <p class="text-gray-600 dark:text-gray-300 leading-relaxed">
+                        Dengan berbagai program keahlian yang ditawarkan, kami terus berupaya mencetak generasi muda yang siap kerja dan berdaya saing tinggi. (Placeholder Lanjutan Sejarah)
+                    </p>
+                </div>
+                <div class="w-full md:w-1/2 px-4 flex justify-center" data-aos="fade-left" data-aos-delay="400">
+                    <!-- Lottie Animation Player -->
+                    <div id="lottie-animation-container" style="width: 300px; height: 300px;"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="prestasi" class="py-16 bg-white dark:bg-gray-900">
+        <div class="container mx-auto px-6">
+            <h2 class="text-3xl font-bold text-center mb-12 text-gray-800 dark:text-gray-100" data-aos="fade-up">Prestasi Sekolah</h2>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-gray-100 dark:bg-gray-700 p-6 rounded-lg shadow-md hover:shadow-xl hover:scale-105 transition-all duration-300 ease-in-out" data-aos="flip-left" data-aos-delay="200">
+                    <h4 class="text-xl font-semibold text-blue-700 dark:text-blue-400 mb-2">Juara LKS Tingkat Provinsi</h4>
+                    <p class="text-gray-600 dark:text-gray-300">Tahun 2023 - Bidang Teknik Komputer dan Jaringan. (Placeholder Prestasi 1)</p>
+                </div>
+                <div class="bg-gray-100 dark:bg-gray-700 p-6 rounded-lg shadow-md hover:shadow-xl hover:scale-105 transition-all duration-300 ease-in-out" data-aos="flip-left" data-aos-delay="400">
+                    <h4 class="text-xl font-semibold text-blue-700 dark:text-blue-400 mb-2">Sekolah Adiwiyata Nasional</h4>
+                    <p class="text-gray-600 dark:text-gray-300">Penghargaan atas komitmen terhadap lingkungan hidup. (Placeholder Prestasi 2)</p>
+                </div>
+                <div class="bg-gray-100 dark:bg-gray-700 p-6 rounded-lg shadow-md hover:shadow-xl hover:scale-105 transition-all duration-300 ease-in-out" data-aos="flip-left" data-aos-delay="600">
+                    <h4 class="text-xl font-semibold text-blue-700 dark:text-blue-400 mb-2">Akreditasi A Unggul</h4>
+                    <p class="text-gray-600 dark:text-gray-300">Pengakuan kualitas pendidikan dari BAN-S/M. (Placeholder Prestasi 3)</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="galeri" class="py-16 bg-gray-50 dark:bg-gray-800">
+        <div class="container mx-auto px-6">
+            <h2 class="text-3xl font-bold text-center mb-12 text-gray-800 dark:text-gray-100" data-aos="fade-up">Galeri Sekolah</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div data-aos="zoom-in-up" data-aos-delay="100"><img src="https://via.placeholder.com/300x200/FFC107/000000?Text=Galeri+1" alt="Galeri Sekolah 1" class="rounded-lg shadow-md w-full h-auto"></div>
+                <div data-aos="zoom-in-up" data-aos-delay="200"><img src="https://via.placeholder.com/300x200/4CAF50/FFFFFF?Text=Galeri+2" alt="Galeri Sekolah 2" class="rounded-lg shadow-md w-full h-auto"></div>
+                <div data-aos="zoom-in-up" data-aos-delay="300"><img src="https://via.placeholder.com/300x200/2196F3/FFFFFF?Text=Galeri+3" alt="Galeri Sekolah 3" class="rounded-lg shadow-md w-full h-auto"></div>
+                <div data-aos="zoom-in-up" data-aos-delay="400"><img src="https://via.placeholder.com/300x200/E91E63/FFFFFF?Text=Galeri+4" alt="Galeri Sekolah 4" class="rounded-lg shadow-md w-full h-auto"></div>
+                <!-- Add more images as needed -->
+            </div>
+        </div>
+    </section>
+
+    {/* <h1 class="text-3xl font-bold text-blue-700">Test</h1> Removed test heading */}
+
+    <script src="js/main.js"></script>
+    <script>
+        lucide.createIcons();
+        AOS.init();
+        // Note: Locomotive Scroll initialization would typically go here if used globally
+        // const scroll = new LocomotiveScroll();
+    </script>
+</body>
+</html>

@@ -1,0 +1,104 @@
+/* Custom styles for SMKS Muhammadiyah Satui */
+
+body {
+    font-family: 'Poppins', sans-serif;
+    -webkit-font-smoothing: antialiased; /* Antialiasing for Webkit */
+    -moz-osx-font-smoothing: grayscale; /* Antialiasing for Firefox */
+    @apply antialiased; /* Tailwind utility for font smoothing */
+}
+
+/* Optional: More specific heading font if different */
+/* h1, h2, h3, h4, h5, h6 { font-family: 'Roboto', sans-serif; } */
+
+/* Ensure smooth transitions are broadly applied if not done by Tailwind utilities everywhere */
+/* Be cautious with overly broad selectors for transitions as they can impact performance or override desired specific transitions.
+   Tailwind's transition utilities on individual elements are often preferred.
+   However, a general baseline can be set like this: */
+html, body, section, div, button, a, input, select, textarea, table, th, td, p, span, h1, h2, h3, h4, h5, h6, ul, li {
+    transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform;
+    transition-duration: 200ms; /* Slightly faster for general elements */
+    transition-timing-function: ease-in-out;
+}
+
+/* Override for specific elements that need longer/different transitions or are GSAP/JS controlled */
+#hero-title, #hero-slogan, #scroll-down-button {
+    /* GSAP controls these, so CSS transition might be ignored or interfere.
+       If set, ensure it doesn't conflict. Let's remove for GSAP elements. */
+    transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow; /* Exclude transform for GSAP */
+}
+
+/* Modals and Toasts should keep their specific JS-controlled/CSS animation timings if different */
+#berita-modal, #delete-confirm-modal, #toast-notification {
+    /* These have opacity/transform transitions managed by JS or specific CSS classes,
+       so this global transition might not be needed or could conflict.
+       The opacity/transform specific to them is better.
+       The `transition-all` utility from Tailwind on these elements or their direct CSS is often enough.
+       Let's assume their specific transitions (e.g. opacity-0, duration-300 in HTML) are sufficient.
+    */
+   /* transition-duration: 300ms; /* Example if we wanted to enforce it here */
+}
+
+#admin-sidebar {
+    /* Sidebar has its own transition in admin/index.html <style> block,
+       e.g., transition: width 0.3s ease-in-out;
+       This global one might add to it or conflict if not careful.
+       It's best to rely on the specific one for width.
+    */
+   /* transition-duration: 300ms; */
+}
+
+
+#scroll-indicator {
+    /* Tailwind 'fixed top-0 left-0 h-1 bg-yellow-500 z-50' should cover most of this */
+    /* Global transition might make width change slightly less snappy if desired,
+       but JS updates width directly. A CSS transition on width here can smooth it. */
+    transition-property: width;
+    transition-duration: 100ms; /* Smoother width change for scroll indicator */
+    transition-timing-function: ease-out;
+}
+
+
+/* Custom scrollbar for webkit browsers - for landing page */
+/* Admin page has its own embedded styles for scrollbar, this will apply to index.html */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+::-webkit-scrollbar-track {
+    background: #f1f1f1; /* Light mode track */
+}
+html.dark ::-webkit-scrollbar-track {
+    /* Using Tailwind color value for consistency: gray-800 */
+    background: #1f2937;
+}
+::-webkit-scrollbar-thumb {
+    /* Using Tailwind color value: stone-400 */
+    background: #a8a29e;
+    border-radius: 10px;
+}
+html.dark ::-webkit-scrollbar-thumb {
+    /* Using Tailwind color value: stone-600 */
+    background: #57534e;
+    border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+    /* Using Tailwind color value: stone-500 */
+    background: #78716c;
+}
+html.dark ::-webkit-scrollbar-thumb:hover {
+    /* Using Tailwind color value: stone-700 */
+    background: #44403c;
+}
+
+/*
+Initial states for GSAP animations are primarily handled by Tailwind classes
+(`opacity-0`, `transform`, `translate-y-10`) directly in the HTML for simplicity with GSAP.
+*/
+
+/* General body styling (example) */
+/* body already has font-family: 'Poppins', sans-serif; and @apply antialiased; */
+
+/* Ensure smooth scrolling if Locomotive Scroll is used more extensively later */
+/* html.has-scroll-smooth {
+    overflow: hidden;
+} */
