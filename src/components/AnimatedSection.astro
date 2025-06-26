@@ -1,0 +1,96 @@
+---
+// src/components/AnimatedSection.astro
+interface Props {
+  animationType?: 'fade-in' | 'fade-up' | 'zoom-in' | 'slide-left' | 'slide-right';
+  delay?: number; // ms
+  threshold?: number; // 0.0 to 1.0 for intersection observer
+  className?: string;
+  tag?: string; // HTML tag for the section, defaults to 'section'
+}
+
+const {
+  animationType = 'fade-up',
+  delay = 0,
+  threshold = 0.1,
+  className = '',
+  tag: Tag = 'div' // Default ke div agar lebih fleksibel, bisa diubah ke section jika mau
+} = Astro.props;
+
+const animationClasses = {
+  'fade-in': 'animate-fade-in',
+  'fade-up': 'animate-fade-up',
+  'zoom-in': 'animate-zoom-in',
+  'slide-left': 'animate-slide-left',
+  'slide-right': 'animate-slide-right' // Anda perlu menambahkan keyframe untuk slide-right jika belum ada
+};
+
+// Tambahkan keyframe untuk slide-right jika belum ada di tailwind.config.mjs atau global.css
+// @keyframes slideRight {
+//   '0%': { opacity: 0, transform: 'translateX(-20px)' },
+//   '100%': { opacity: 1, transform: 'translateX(0)' },
+// }
+// .animate-slide-right { animation: slideRight 0.8s ease-out forwards; }
+
+const appliedAnimationClass = animationClasses[animationType] || 'animate-fade-up';
+---
+
+<Tag
+  class:list={["opacity-0", appliedAnimationClass, className]}
+  style={`animation-delay: ${delay}ms;`}
+  data-threshold={threshold}
+>
+  <slot />
+</Tag>
+
+<script>
+  // Intersection Observer untuk memicu animasi saat elemen masuk viewport
+  // Dijalankan di client-side
+  document.addEventListener('astro:page-load', () => {
+    const animatedSections = document.querySelectorAll('[data-threshold]');
+
+    if ("IntersectionObserver" in window) {
+      const observer = new IntersectionObserver((entries, observerInstance) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            // Tambahkan kelas untuk memulai animasi, atau langsung set opacity jika animasi sudah diatur via class
+            // Kelas 'opacity-0' akan dihapus oleh animasi 'forwards'
+            // Jika mau lebih eksplisit, bisa juga: entry.target.style.opacity = '1';
+            // Namun karena animasi sudah 'forwards', ini cukup
+            entry.target.classList.add('intersected'); // Bisa digunakan untuk styling tambahan jika perlu
+            observerInstance.unobserve(entry.target); // Hentikan observasi setelah animasi dipicu
+          }
+        });
+      }, {
+        // threshold diambil dari data attribute, default 0.1
+        // Sayangnya, kita tidak bisa langsung pass threshold dari props ke sini tanpa script inline per komponen
+        // Jadi kita akan gunakan nilai default atau set secara global jika perlu
+        threshold: 0.1 // Default threshold, bisa disesuaikan
+      });
+
+      animatedSections.forEach(section => {
+        const sectionThreshold = parseFloat(section.getAttribute('data-threshold')) || 0.1;
+        // Untuk threshold per elemen, kita perlu membuat observer baru atau filter di callback
+        // Untuk sederhana, kita pakai threshold global untuk semua observer ini
+        // Jika ingin threshold per elemen, perlu logika lebih kompleks atau instance observer per elemen.
+        // Untuk saat ini, data-threshold hanya sebagai penanda.
+        observer.observe(section);
+      });
+    } else {
+      // Fallback untuk browser tanpa IntersectionObserver: langsung tampilkan elemen
+      animatedSections.forEach(section => {
+        section.style.opacity = '1';
+      });
+    }
+  });
+</script>
+
+<style>
+  /* Pastikan class animasi memiliki 'forwards' agar state terakhir dipertahankan */
+  /* Ini sudah diatur di tailwind.config.mjs */
+  /* .animate-fade-up, .animate-fade-in, .animate-zoom-in, .animate-slide-left {
+    opacity: 0; /* Initial state before animation starts
+  } */
+
+  /* Kelas opacity-0 akan membuat elemen tidak terlihat sampai animasi dimulai */
+  /* Animasi dari Tailwind akan mengubah opacity ke 1 */
+</style>

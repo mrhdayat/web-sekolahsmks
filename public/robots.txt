@@ -1,0 +1,16 @@
+# robots.txt for SMKS Muhammadiyah Satui Website
+
+User-agent: *
+Allow: /
+
+# Disallow admin pages from being crawled
+Disallow: /admin/
+Disallow: /admin/*
+
+# Sitemap location (jika sitemap.xml ada di root)
+Sitemap: https://smksmuhsatui.sch.id/sitemap.xml
+# Ganti smksmuhsatui.sch.id dengan domain produksi Anda
+
+# Jika menggunakan Astro sitemap integration, path sitemap mungkin /sitemap-index.xml
+# Sesuaikan path Sitemap di atas dengan output dari integrasi sitemap Astro.
+# Jika tidak ada sitemap, hapus atau komentari baris Sitemap.

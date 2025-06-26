@@ -1,0 +1,68 @@
+---
+// src/layouts/AdminLayout.astro
+import { ViewTransitions } from 'astro:transitions';
+import AdminSidebar from '@components/admin/AdminSidebar.astro';
+import AdminTopbar from '@components/admin/AdminTopbar.astro';
+import '@styles/global.css'; // Impor CSS global (termasuk Tailwind)
+
+interface Props {
+	title: string;
+  currentPage?: string; // Untuk menandai link aktif di sidebar
+}
+
+const { title, currentPage } = Astro.props;
+
+// Skrip tema mirip dengan Layout.astro utama
+// (Bisa juga dijadikan komponen terpisah atau script global jika sering dipakai)
+const themeScript = `
+  const theme = (() => {
+    if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
+      return localStorage.getItem('theme');
+    }
+    if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      return 'dark';
+    }
+    return 'light';
+  })();
+  if (theme === 'light') {
+    document.documentElement.classList.remove('dark');
+  } else {
+    document.documentElement.classList.add('dark');
+  }
+  window.initialTheme = theme;
+`;
+---
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <meta name="generator" content={Astro.generator} />
+  <title>{title} | Admin SMKS Muhammadiyah Satui</title>
+  <script is:inline define:vars={{ themeScript }} dangerouslySetInnerHTML={{ __html: themeScript }}></script>
+  <ViewTransitions fallback="animate" />
+</head>
+<body class="bg-slate-100 dark:bg-slate-900 text-slate-800 dark:text-slate-100 antialiased">
+  <div class="flex h-screen overflow-hidden">
+    <!-- Sidebar -->
+    <AdminSidebar client:load currentPage={currentPage} />
+
+    <!-- Content area -->
+    <div class="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
+      <!-- Topbar -->
+      <AdminTopbar client:load />
+
+      <main class="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
+        <slot />
+      </main>
+    </div>
+  </div>
+  {/* Global Modals or other elements specific to admin layout can go here */}
+</body>
+</html>
+
+<style is:global>
+/* Styling spesifik untuk admin jika ada, atau bisa diatur via Tailwind */
+/* Pastikan global.css diimpor dan Tailwind memproses ini */
+</style>

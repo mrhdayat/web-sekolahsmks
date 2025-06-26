@@ -1,0 +1,145 @@
+---
+import { ViewTransitions } from 'astro:transitions';
+import Navbar from '@components/Navbar.astro';
+import Footer from '@components/Footer.astro';
+import ThemeToggle from '@components/ThemeToggle.astro';
+import Lightbox from '@components/Lightbox.astro'; // Import Lightbox
+import '@styles/global.css'; // Impor CSS global
+
+interface Props {
+	title: string;
+	description?: string;
+  bodyClass?: string;
+}
+
+const { title, description = "Website Profil SMKS Muhammadiyah Satui", bodyClass = "" } = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth scroll-snap-y-proximity" style="scroll-padding-top: var(--navbar-height-initial-desktop);"> {/* Menggunakan var tinggi navbar awal desktop */}
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width" />
+	<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+	<meta name="generator" content={Astro.generator} />
+	<title>{title} - SMKS Muhammadiyah Satui</title>
+  <meta name="description" content={description} />
+
+  {/* SEO Meta Tags */}
+  <link rel="canonical" href={canonicalURL} />
+  <meta property="og:title" content={`${title} - SMKS Muhammadiyah Satui`} />
+  <meta property="og:description" content={description} />
+  <meta property="og:url" content={canonicalURL} />
+  <meta property="og:image" content="/og-image.jpg" /> {/* Ganti dengan gambar OG default */}
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content={`${title} - SMKS Muhammadiyah Satui`} />
+  <meta name="twitter:description" content={description} />
+  <meta name="twitter:image" content="/og-image.jpg" /> {/* Ganti dengan gambar OG default */}
+
+
+  {/* Preload Fonts (contoh, jika menggunakan Google Fonts) */}
+  {/* <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet"> */}
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "School", // atau EducationalOrganization
+    "name": "SMKS Muhammadiyah Satui",
+    "url": Astro.site ? Astro.site.toString().slice(0,-1) : "https://smksmuhsatui.sch.id", // Ganti dengan URL Asli
+    "logo": new URL("/favicon.svg", Astro.site || "https://smksmuhsatui.sch.id").toString(),
+    "description": description, // Deskripsi dari props
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "Jl. Provinsi KM 163 RT.03 Desa Sungai Danau, Kec. Satui",
+      "addressLocality": "Tanah Bumbu",
+      "addressRegion": "Kalimantan Selatan",
+      "postalCode": "72275",
+      "addressCountry": "ID"
+    },
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "telephone": "+62-XXXX-XXXXXXX", // Ganti dengan nomor telepon valid
+      "contactType": "Customer Service / Pendaftaran", // Sesuaikan
+      "email": "smksmuhammadiyahsatui@gmail.com"
+    },
+    "sameAs": [ // Tambahkan link media sosial jika ada
+      // "https://www.facebook.com/SMKSMuhSatui",
+      // "https://www.instagram.com/SMKSMuhSatui"
+    ]
+  })} />
+
+  <script is:inline>
+    // Skrip untuk menerapkan tema dari localStorage sebelum render
+    const theme = (() => {
+      if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
+        return localStorage.getItem('theme');
+      }
+      if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        return 'dark';
+      }
+      return 'light';
+    })();
+
+    if (theme === 'light') {
+      document.documentElement.classList.remove('dark');
+    } else {
+      document.documentElement.classList.add('dark');
+    }
+    // Simpan tema awal di window object agar bisa diakses komponen Astro
+    window.initialTheme = theme;
+  </script>
+
+	<ViewTransitions fallback="animate" />
+</head>
+<body class:list={["bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 antialiased min-h-screen flex flex-col", bodyClass]}>
+  <div id="app" class="flex flex-col flex-grow">
+    <Navbar />
+    <main class="flex-grow">
+      <slot />
+    </main>
+    <Footer />
+    <div class="fixed bottom-4 right-4 z-50">
+      <ThemeToggle client:load />
+    </div>
+  </div>
+  <Lightbox /> {/* Tambahkan komponen Lightbox di sini */}
+</body>
+</html>
+
+<style is:global>
+  /* View Transition Styles (Contoh) */
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes fade-out {
+    from { opacity: 1; }
+    to { opacity: 0; }
+  }
+
+  @keyframes slide-from-right {
+    from { transform: translateX(30px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1;}
+  }
+
+  @keyframes slide-to-left {
+    from { transform: translateX(0); opacity: 1;}
+    to { transform: translateX(-30px); opacity: 0; }
+  }
+
+  ::view-transition-old(root) {
+    animation: 0.3s cubic-bezier(0.4, 0, 0.2, 1) both fade-out,
+               0.3s cubic-bezier(0.4, 0, 0.2, 1) both slide-to-left;
+  }
+  ::view-transition-new(root) {
+    animation: 0.3s cubic-bezier(0.4, 0, 0.2, 1) 0.1s both fade-in,
+               0.3s cubic-bezier(0.4, 0, 0.2, 1) 0.1s both slide-from-right;
+  }
+
+  /* Untuk transisi spesifik antar halaman atau elemen, bisa ditambahkan di sini atau di komponen terkait */
+</style>

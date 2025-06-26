@@ -1,0 +1,135 @@
+---
+// src/pages/admin/login.astro
+import { supabase } from '@lib/supabase'; // Impor Supabase client
+
+// Redirect jika sudah login
+if (Astro.cookies.has('sb-access-token') && Astro.cookies.has('sb-refresh-token')) {
+  // Verifikasi token di server-side jika perlu keamanan lebih, atau andalkan RLS Supabase
+  // Untuk kesederhanaan, kita redirect langsung jika cookie ada.
+  // Supabase client di client-side akan handle session.
+  return Astro.redirect('/admin/dashboard');
+}
+
+let error: string | null = null;
+let email: string = '';
+
+if (Astro.request.method === 'POST') {
+  try {
+    const formData = await Astro.request.formData();
+    email = formData.get('email') as string;
+    const password = formData.get('password') as string;
+
+    if (!email || !password) {
+      throw new Error('Email dan password harus diisi.');
+    }
+    if (!supabase) {
+      throw new Error('Supabase client tidak terinisialisasi.');
+    }
+
+    const { data, error: authError } = await supabase.auth.signInWithPassword({
+      email: email,
+      password: password,
+    });
+
+    if (authError) {
+      console.error('Supabase Auth Error:', authError.message);
+      throw new Error(authError.message === 'Invalid login credentials' ? 'Email atau password salah.' : authError.message);
+    }
+
+    if (data.session) {
+      // Set cookies untuk session management di server-side (jika diperlukan untuk middleware)
+      // Supabase JS client secara otomatis menangani session di client-side (localStorage)
+      // Astro.cookies.set('sb-access-token', data.session.access_token, { path: '/', httpOnly: true, secure: import.meta.env.PROD, maxAge: data.session.expires_in });
+      // Astro.cookies.set('sb-refresh-token', data.session.refresh_token, { path: '/', httpOnly: true, secure: import.meta.env.PROD });
+
+      // Karena kita menggunakan output: 'hybrid' atau 'server', kita bisa set cookie di sini.
+      // Untuk client-side routing murni, ini mungkin tidak selalu sinkron tanpa page reload.
+      // Namun, Supabase client-side auth helper akan handle ini.
+      // Kita set cookie agar middleware Astro bisa membacanya.
+      const { access_token, refresh_token, expires_in } = data.session;
+      Astro.cookies.set("sb-access-token", access_token, {
+        path: "/",
+        maxAge: expires_in, // biasanya 1 jam
+        httpOnly: true,
+        secure: import.meta.env.PROD, // true di production
+        sameSite: "lax",
+      });
+      Astro.cookies.set("sb-refresh-token", refresh_token, {
+        path: "/",
+        maxAge: 60 * 60 * 24 * 7, // biasanya 1 minggu
+        httpOnly: true,
+        secure: import.meta.env.PROD,
+        sameSite: "lax",
+      });
+
+      return Astro.redirect('/admin/dashboard');
+    } else {
+      throw new Error('Login gagal, tidak ada session data.');
+    }
+
+  } catch (e: any) {
+    error = e.message || 'Terjadi kesalahan saat login.';
+  }
+}
+---
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Login - SMKS Muhammadiyah Satui</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <!-- Tailwind CSS akan di-handle oleh Astro build proses -->
+  <script is:inline>
+    // Skrip untuk menerapkan tema dari localStorage sebelum render (mirip di Layout.astro)
+    const theme = (() => {
+      if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
+        return localStorage.getItem('theme');
+      }
+      if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        return 'dark';
+      }
+      return 'light';
+    })();
+    if (theme === 'light') {
+      document.documentElement.classList.remove('dark');
+    } else {
+      document.documentElement.classList.add('dark');
+    }
+  </script>
+</head>
+<body class="bg-slate-100 dark:bg-slate-900 flex items-center justify-center min-h-screen p-4"> {/* Tambah flex, items-center, justify-center, min-h-screen, p-4 */}
+  <div class="bg-white dark:bg-slate-800 shadow-xl p-8 rounded-lg w-full max-w-md"> {/* Hapus kelas login-container dan logo karena Tailwind akan handle */}
+    <img src="/favicon.svg" alt="Logo Sekolah" class="mx-auto h-16 w-16 mb-6"> {/* Styling logo dengan Tailwind */}
+    <h1 class="text-3xl font-bold text-center text-slate-800 dark:text-slate-100 mb-8">Admin Login</h1> {/* Perbesar judul */}
+
+    {error && <div class="error-message bg-red-100 dark:bg-red-900/50 border border-red-400 dark:border-red-600 text-red-700 dark:text-red-300 px-4 py-3 rounded-md mb-4 text-center" role="alert">{error}</div>}
+
+    <form method="POST" class="space-y-6">
+      <div class="form-group">
+        <label for="email" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Email</label>
+        <input type="email" name="email" id="email" required value={email}
+               class="mt-1 block w-full px-3 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-md shadow-sm placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm">
+      </div>
+      <div class="form-group">
+        <label for="password" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Password</label>
+        <input type="password" name="password" id="password" required
+               class="mt-1 block w-full px-3 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-md shadow-sm placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm">
+      </div>
+      <div>
+        <button type="submit"
+                class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-sky-600 hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-100 dark:focus:ring-offset-slate-900 focus:ring-sky-500 transition-colors">
+          Login
+        </button>
+      </div>
+    </form>
+    <p class="mt-6 text-center text-xs text-slate-500 dark:text-slate-400">
+      Lupa password? Hubungi administrator.
+    </p>
+  </div>
+  <script>
+    // Optional: client-side validation or enhancements can go here
+    // Supabase client-side auth listener can also be added for SPA-like behavior on redirect
+  </script>
+</body>
+</html>

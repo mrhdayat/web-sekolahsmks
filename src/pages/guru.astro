@@ -1,0 +1,85 @@
+---
+import Layout from '@layouts/Layout.astro';
+import AnimatedSection from '@components/AnimatedSection.astro';
+import Card from '@components/Card.astro'; // Card tidak digunakan secara langsung di sini lagi
+import { getSemuaGuru, type Guru } from '@lib/supabase';
+
+// Ambil data guru dari Supabase
+// Astro.glob() tidak digunakan lagi untuk data dari DB
+let daftarGuru: Guru[] = [];
+try {
+  daftarGuru = await getSemuaGuru();
+} catch (error) {
+  console.error("Gagal memuat data guru:", error);
+  // daftarGuru akan berisi mock data dari getSemuaGuru jika DEV mode dan ada error, atau array kosong
+}
+
+// Fallback jika daftarGuru kosong setelah fetch (misalnya Supabase down dan bukan DEV mode)
+if (!daftarGuru || daftarGuru.length === 0) {
+    daftarGuru = [
+        { id: 997, nama: "Data Guru Tidak Tersedia", jabatan: "Silakan coba lagi nanti", mapel: "-", foto_url: "/images/placeholders/guru-error.jpg", quotes: "Tidak dapat memuat data guru saat ini." },
+        { id: 998, nama: "Periksa Koneksi Supabase", jabatan: "Pastikan .env sudah benar", mapel: "-", foto_url: "/images/placeholders/guru-error.jpg", quotes: "Cek konfigurasi Supabase URL & Key." },
+    ];
+}
+
+// Placeholder untuk gambar guru (tetap berguna jika foto_url null)
+const placeholderImageDir = "public/images/placeholders";
+const defaultFoto = "/images/placeholders/default-avatar.png"; // Tambahkan default avatar
+---
+
+<Layout title="Daftar Guru">
+  <section class="py-12 md:py-20 bg-sky-50 dark:bg-slate-800">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+      <AnimatedSection animationType="fade-up">
+        <h1 class="text-4xl md:text-5xl font-bold text-center text-sky-600 dark:text-sky-400 mb-12" transition:name="page-title-guru">
+          Tenaga Pendidik Profesional Kami
+        </h1>
+        <p class="text-center text-lg text-slate-600 dark:text-slate-300 max-w-2xl mx-auto mb-16">
+          Bertemu dengan para pendidik berdedikasi yang siap membimbing siswa meraih potensi terbaiknya.
+        </p>
+      </AnimatedSection>
+
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+        {daftarGuru.map((guru, index) => (
+          <AnimatedSection animationType="zoom-in" delay={index * 100}>
+            <div class="bg-white dark:bg-slate-700 rounded-xl shadow-xl overflow-hidden group transform hover:-translate-y-1 transition-all duration-300 hover:shadow-sky-400/30 dark:hover:shadow-sky-500/20 flex flex-col h-full">
+              <div class="relative h-64 w-full">
+                <img
+                  src={guru.foto_url || defaultFoto}
+                  alt={`Foto ${guru.nama}`}
+                  class="w-full h-full object-cover object-top transition-transform duration-500 ease-in-out group-hover:scale-105"
+                  loading="lazy"
+                  onerror={`this.onerror=null;this.src='${defaultFoto}';`}
+                  transition:name={`guru-foto-${guru.id}`}
+                />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent"></div>
+                <div class="absolute bottom-0 left-0 p-4">
+                  <h3 class="text-xl font-semibold text-white leading-tight" transition:name={`guru-nama-${guru.id}`}>{guru.nama}</h3>
+                  <p class="text-sky-300 text-sm" transition:name={`guru-jabatan-${guru.id}`}>{guru.jabatan || 'Tenaga Pendidik'}</p>
+                </div>
+              </div>
+              <div class="p-5 flex flex-col flex-grow">
+                <p class="text-sm text-slate-600 dark:text-slate-300 mb-1">Mengajar: {guru.mapel || '-'}</p>
+                {guru.quotes && (
+                  <blockquote class="mt-2 flex-grow border-l-4 border-sky-500 dark:border-sky-400 pl-3 italic text-sm text-slate-500 dark:text-slate-400">
+                    "{guru.quotes}"
+                  </blockquote>
+                )}
+                <div class="mt-4 text-right">
+                  {/* Halaman detail guru bisa dibuat nanti jika diperlukan */}
+                  {/* <a href={`/guru/${guru.id}`} class="text-sm text-sky-600 dark:text-sky-400 hover:underline font-medium">
+                    Lihat Profil &rarr;
+                  </a> */}
+                </div>
+              </div>
+            </div>
+          </AnimatedSection>
+        ))}
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  /* Custom styles for guru cards if needed */
+</style>

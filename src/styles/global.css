@@ -1,0 +1,35 @@
+/* Styling global dasar untuk Tailwind */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Contoh kustomisasi dasar jika diperlukan */
+body {
+  @apply bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 transition-colors duration-300;
+  font-family: 'Inter', sans-serif; /* Contoh font, bisa diganti */
+}
+
+/* Untuk View Transitions yang lebih smooth */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.3s; /* Sesuaikan durasi jika perlu */
+}
+
+/* Custom scrollbar (opsional, bisa disesuaikan) */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  @apply bg-slate-100 dark:bg-slate-800;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-sky-500 dark:bg-sky-600 rounded-md;
+}
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-sky-600 dark:bg-sky-500;
+}
+
+html {
+  scroll-behavior: smooth;
+}

@@ -1,0 +1,110 @@
+---
+// src/components/admin/AdminSidebar.astro
+interface Props {
+    currentPage?: string;
+}
+const { currentPage } = Astro.props;
+
+const adminNavLinks = [
+  { href: "/admin/dashboard", label: "Dashboard", icon: "home" },
+  { href: "/admin/dashboard/profil", label: "Profil Sekolah", icon: "identification" },
+  { href: "/admin/dashboard/guru", label: "Kelola Guru", icon: "users" },
+  { href: "/admin/dashboard/jurusan", label: "Kelola Jurusan", icon: "academic-cap" },
+  { href: "/admin/dashboard/galeri", label: "Kelola Galeri", icon: "photo" },
+  { href: "/admin/dashboard/testimoni", label: "Kelola Testimoni", icon: "chat-bubble-left-ellipsis" },
+  { href: "/admin/dashboard/berita", label: "Kelola Berita", icon: "newspaper" },
+  // { href: "/admin/dashboard/pengaturan", label: "Pengaturan", icon: "cog-6-tooth" },
+];
+
+const currentPath = Astro.url.pathname;
+---
+<aside
+  id="admin-sidebar"
+  class="fixed left-0 top-0 z-40 h-screen w-64 bg-slate-800 dark:bg-slate-900 text-slate-100 transition-transform -translate-x-full md:translate-x-0"
+  aria-label="Sidebar"
+>
+  <div class="h-full px-3 py-4 overflow-y-auto">
+    <a href="/admin/dashboard" class="flex items-center ps-2.5 mb-5">
+      <img src="/favicon.svg" class="h-8 me-3 sm:h-9" alt="SMKS Muh Satui Logo" />
+      <span class="self-center text-xl font-semibold whitespace-nowrap dark:text-white">Admin Panel</span>
+    </a>
+    <ul class="space-y-2 font-medium">
+      {adminNavLinks.map(link => (
+        <li>
+          <a
+            href={link.href}
+            class:list={[
+              "flex items-center p-2 rounded-lg transition-colors duration-150",
+              currentPath.startsWith(link.href) // Ganti currentPage dengan currentPath.startsWith untuk sub-halaman
+                ? "bg-sky-600 text-white"
+                : "text-slate-200 hover:bg-slate-700 dark:hover:bg-slate-700/50 hover:text-sky-300",
+            ]}
+          >
+            <!-- Placeholder untuk Ikon SVG Heroicons -->
+            <svg class="w-5 h-5 text-slate-400 group-hover:text-sky-300 transition duration-75" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              { link.icon === 'home' && <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path> }
+              { link.icon === 'identification' && <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 012-2h2a2 2 0 012 2v1m-4 0h4m-2 11V9.25m0 11.75a2.5 2.5 0 100-5 2.5 2.5 0 000 5z"></path> }
+              { link.icon === 'users' && <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 016-6h6a6 6 0 016 6v1h-3"></path> }
+              { link.icon === 'academic-cap' && <path stroke-linecap="round" stroke-linejoin="round" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342M6.75 15a.75.75 0 100-1.5.75.75 0 000 1.5zm0 0v-3.675A55.378 55.378 0 0112 8.443m-7.007 11.55A5.981 5.981 0 006.75 15.75v-1.5"></path> }
+              { link.icon === 'photo' && <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path> }
+              { link.icon === 'chat-bubble-left-ellipsis' && <path stroke-linecap="round" stroke-linejoin="round" d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12c0 4.556-3.861 8.25-8.625 8.25S3.75 16.556 3.75 12 7.611 3.75 12.375 3.75 21 7.444 21 12z"></path> }
+              { link.icon === 'newspaper' && <path stroke-linecap="round" stroke-linejoin="round" d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 01-2.25 2.25H5.625a2.25 2.25 0 01-2.25-2.25V18m12.75-3h.008v.008H18.75V15zm0 2.25h.008v.008H18.75v-.008zm0 2.25h.008v.008H18.75V19.5zm-15-3.375A2.25 2.25 0 014.5 13.5H18V9.75A2.25 2.25 0 0015.75 7.5H4.5A2.25 2.25 0 002.25 9.75v3.375c0 .621.504 1.125 1.125 1.125z"></path> }
+              { link.icon === 'cog-6-tooth' && <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12a7.5 7.5 0 0015 0m-15 0a7.5 7.5 0 1115 0m-15 0H3m1.5 0H21m-9 6.75v1.5m0-15v1.5m-3 10.5l-1.06-1.06M16.06 7.94L15 9m-9 6l-1.06 1.06M16.06 16.06L15 15M6.75 12a5.25 5.25 0 1110.5 0 5.25 5.25 0 01-10.5 0z"></path> }
+            </svg>
+            <span class="ms-3">{link.label}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+    <div class="mt-auto pt-6">
+        <a href="/" target="_blank" class="flex items-center p-2 text-slate-300 hover:text-sky-300 hover:bg-slate-700 rounded-lg group">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+            <span class="ms-3">Lihat Website</span>
+        </a>
+    </div>
+  </div>
+</aside>
+
+<script>
+// Script untuk toggle sidebar di mobile
+const sidebar = document.getElementById('admin-sidebar');
+const sidebarToggleButton = document.getElementById('admin-sidebar-toggle'); // Akan dibuat di Topbar
+
+if (sidebarToggleButton && sidebar) {
+  sidebarToggleButton.addEventListener('click', () => {
+    const isCurrentlyHidden = sidebar.classList.contains('-translate-x-full');
+    if (isCurrentlyHidden) {
+      sidebar.classList.remove('-translate-x-full');
+      sidebar.classList.add('translate-x-0');
+      sidebarToggleButton.setAttribute('aria-expanded', 'true');
+    } else {
+      sidebar.classList.add('-translate-x-full');
+      sidebar.classList.remove('translate-x-0');
+      sidebarToggleButton.setAttribute('aria-expanded', 'false');
+    }
+  });
+
+  // Close sidebar on link click for mobile view (optional)
+  const sidebarLinks = sidebar.querySelectorAll('a');
+  sidebarLinks.forEach(link => {
+    link.addEventListener('click', () => {
+      if (window.innerWidth < 768 && !sidebar.classList.contains('-translate-x-full')) {
+        sidebar.classList.add('-translate-x-full');
+      }
+    });
+  });
+}
+// Close sidebar on route change (astro:page-load) in mobile
+document.addEventListener('astro:page-load', () => {
+    if (window.innerWidth < 768 && sidebar && !sidebar.classList.contains('-translate-x-full')) {
+        sidebar.classList.add('-translate-x-full');
+    }
+});
+
+</script>
+
+<style>
+  /* Styling tambahan untuk sidebar jika perlu */
+  /* md:translate-x-0 akan membuat sidebar visible di desktop */
+  /* -translate-x-full akan menyembunyikannya di mobile secara default */
+</style>

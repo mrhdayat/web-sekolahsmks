@@ -1,0 +1,71 @@
+---
+// src/pages/admin/dashboard/index.astro
+// (index.astro di dalam folder dashboard)
+import AdminLayout from '@layouts/AdminLayout.astro';
+import Card from '@components/Card.astro'; // Bisa digunakan untuk statistik atau ringkasan
+
+// Data dummy untuk statistik dashboard
+const stats = [
+  { title: "Total Guru", value: "15", icon: "users", color: "sky" }, // Ganti dengan data dinamis nanti
+  { title: "Jumlah Jurusan", value: "3", icon: "academic-cap", color: "emerald" },
+  { title: "Item Galeri", value: "25", icon: "photo", color: "amber" },
+  { title: "Pengunjung Hari Ini", value: "120", icon: "chart-bar", color: "rose" }, // Contoh
+];
+---
+<AdminLayout title="Dashboard" currentPage="/admin/dashboard">
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold text-slate-800 dark:text-slate-100">Selamat Datang, Admin!</h1>
+    <p class="text-slate-600 dark:text-slate-400 mt-1">Berikut adalah ringkasan aktivitas sekolah.</p>
+  </div>
+
+  <!-- Grid Statistik -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+    {stats.map(stat => (
+      <div class={`bg-white/80 dark:bg-slate-700/80 backdrop-blur-sm shadow-xl rounded-xl p-6 border-l-4 border-${stat.color}-500 dark:border-${stat.color}-400 shadow-glass`}>
+        <div class="flex items-center justify-between">
+          <div>
+            <div class={`text-sm font-medium text-slate-500 dark:text-slate-400 uppercase`}>{stat.title}</div>
+            <div class={`text-3xl font-bold text-slate-800 dark:text-slate-100 mt-1`}>{stat.value}</div>
+          </div>
+          <div class={`p-3 rounded-full bg-${stat.color}-500/20 text-${stat.color}-600 dark:text-${stat.color}-400`}>
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              { stat.icon === 'users' && <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 016-6h6a6 6 0 016 6v1h-3"></path> }
+              { stat.icon === 'academic-cap' && <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342M6.75 15a.75.75 0 100-1.5.75.75 0 000 1.5zm0 0v-3.675A55.378 55.378 0 0112 8.443m-7.007 11.55A5.981 5.981 0 006.75 15.75v-1.5"></path> }
+              { stat.icon === 'photo' && <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path> }
+              { stat.icon === 'chart-bar' && <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path> }
+            </svg>
+          </div>
+        </div>
+      </div>
+    ))}
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <div class="lg:col-span-2 bg-white dark:bg-slate-700 shadow-lg rounded-xl p-6">
+      <h2 class="text-xl font-semibold text-slate-800 dark:text-slate-100 mb-4">Aktivitas Terbaru</h2>
+      <ul class="space-y-3">
+        <li class="p-3 bg-slate-50 dark:bg-slate-600/50 rounded-md hover:bg-slate-100 dark:hover:bg-slate-600 transition-colors">
+          <p class="text-sm text-slate-700 dark:text-slate-200"><span class="font-medium text-sky-600 dark:text-sky-400">Admin</span> baru saja menambahkan <span class="font-medium">data guru baru: Pak Budi</span>.</p>
+          <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">2 menit yang lalu</p>
+        </li>
+        <li class="p-3 bg-slate-50 dark:bg-slate-600/50 rounded-md hover:bg-slate-100 dark:hover:bg-slate-600 transition-colors">
+          <p class="text-sm text-slate-700 dark:text-slate-200">Item galeri <span class="font-medium">"Lomba Cerdas Cermat"</span> telah diperbarui.</p>
+          <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">1 jam yang lalu</p>
+        </li>
+        <li class="p-3 bg-slate-50 dark:bg-slate-600/50 rounded-md hover:bg-slate-100 dark:hover:bg-slate-600 transition-colors">
+            <p class="text-sm text-slate-700 dark:text-slate-200">Profil sekolah bagian <span class="font-medium">Visi & Misi</span> telah diupdate.</p>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Kemarin</p>
+          </li>
+      </ul>
+    </div>
+    <div class="bg-white dark:bg-slate-700 shadow-lg rounded-xl p-6">
+      <h2 class="text-xl font-semibold text-slate-800 dark:text-slate-100 mb-4">Pintasan Cepat</h2>
+      <ul class="space-y-2">
+        <li><a href="/admin/dashboard/guru/tambah" class="block p-3 bg-sky-500 hover:bg-sky-600 text-white rounded-md transition-colors text-center font-medium">Tambah Guru Baru</a></li>
+        <li><a href="/admin/dashboard/galeri/upload" class="block p-3 bg-emerald-500 hover:bg-emerald-600 text-white rounded-md transition-colors text-center font-medium">Upload Foto Galeri</a></li>
+        <li><a href="/admin/dashboard/profil" class="block p-3 bg-amber-500 hover:bg-amber-600 text-white rounded-md transition-colors text-center font-medium">Edit Profil Sekolah</a></li>
+      </ul>
+    </div>
+  </div>
+
+</AdminLayout>

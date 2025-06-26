@@ -1,0 +1,115 @@
+---
+import Layout from '@layouts/Layout.astro';
+import AnimatedSection from '@components/AnimatedSection.astro';
+---
+
+<Layout title="Kontak Kami">
+  <section class="py-12 md:py-20 bg-sky-50 dark:bg-slate-800">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+      <AnimatedSection animationType="fade-up">
+        <h1 class="text-4xl md:text-5xl font-bold text-center text-sky-600 dark:text-sky-400 mb-12" transition:name="page-title-kontak">
+          Hubungi Kami
+        </h1>
+        <p class="text-center text-lg text-slate-600 dark:text-slate-300 max-w-2xl mx-auto mb-16">
+          Kami senang mendengar dari Anda! Silakan gunakan informasi di bawah ini untuk menghubungi kami atau kunjungi sekolah kami.
+        </p>
+      </AnimatedSection>
+
+      <div class="grid md:grid-cols-2 gap-8 md:gap-12 items-start">
+        <AnimatedSection animationType="slide-right" delay={200}>
+          <div class="bg-white dark:bg-slate-700 shadow-xl rounded-lg p-6 md:p-8">
+            <h2 class="text-2xl font-semibold text-slate-800 dark:text-slate-100 mb-6">Informasi Kontak</h2>
+            <div class="space-y-4 text-slate-600 dark:text-slate-300">
+              <div>
+                <h3 class="font-medium text-slate-700 dark:text-slate-200 text-lg flex items-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 mr-2 text-sky-500 dark:text-sky-400"><path fill-rule="evenodd" d="M9.69 18.933l.003.001C9.89 19.02 10 19 10 19s.11.02.308-.066l.002-.001zm.612-1.426a5.022 5.022 0 01-1.009 2.527l.005.005a.75.75 0 11-1.23-1.23l-.005-.005a6.522 6.522 0 001.683-3.27.75.75 0 01.831.27l.003.005zm-1.412-4.01a.75.75 0 01.83.27l.004.005a6.523 6.523 0 001.684-3.27.75.75 0 01.83-.27l.004.005a5.022 5.022 0 01-1.009 2.527l.005.005a.75.75 0 11-1.23-1.23l-.005-.005a6.522 6.522 0 001.682-3.27.75.75 0 01.831.27l.003.005a5.022 5.022 0 01-1.009 2.527l.005.005a.75.75 0 11-1.23-1.23l-.005-.005A6.522 6.522 0 005 9.75c0 1.664.629 3.185 1.682 4.33a6.522 6.522 0 001.682 1.417.75.75 0 01.27-.831l.005-.003a5.022 5.022 0 012.527 1.009l.005-.005a.75.75 0 11-1.23 1.23l-.005.005a6.523 6.523 0 00-3.27-1.683.75.75 0 01-.27-.831l.005-.004a5.022 5.022 0 012.527-1.009l.005.004zM10 4a.75.75 0 01.75.75v.01a.75.75 0 01-1.5 0V4.75A.75.75 0 0110 4zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" /><path d="M3 9.75A7.25 7.25 0 0110 2.5a7.25 7.25 0 017.25 7.25c0 4.005-3.245 7.25-7.25 7.25S3 13.755 3 9.75zM10 1.25C5.995 1.25 2.5 4.745 2.5 8.75c0 3.851 2.04 6.886 4.886 8.495L7.5 17.5l.201.201A1.25 1.25 0 008.939 18h2.122a1.25 1.25 0 001.238-.799L12.5 17.5l.114-.255c2.846-1.609 4.886-4.644 4.886-8.495C17.5 4.745 14.005 1.25 10 1.25z" /></svg>
+                  Alamat Sekolah:
+                </h3>
+                <p>Jl. Provinsi KM 163 RT.03 Desa Sungai Danau, Kec. Satui, Kab. Tanah Bumbu, Kalimantan Selatan, Kode Pos 72275.</p>
+              </div>
+              <div>
+                <h3 class="font-medium text-slate-700 dark:text-slate-200 text-lg flex items-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 mr-2 text-sky-500 dark:text-sky-400"><path d="M3 4a2 2 0 00-2 2v1.161l8.441 4.221a1.25 1.25 0 001.118 0L19 7.162V6a2 2 0 00-2-2H3z" /><path d="M19 8.839l-7.77 3.885a2.75 2.75 0 01-2.46 0L1 8.839V14a2 2 0 002 2h14a2 2 0 002-2V8.839z" /></svg>
+                  Email:
+                </h3>
+                <a href="mailto:smksmuhammadiyahsatui@gmail.com" class="hover:text-sky-500 dark:hover:text-sky-400">smksmuhammadiyahsatui@gmail.com</a>
+              </div>
+              <div>
+                <h3 class="font-medium text-slate-700 dark:text-slate-200 text-lg flex items-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 mr-2 text-sky-500 dark:text-sky-400"><path fill-rule="evenodd" d="M2 3.5A1.5 1.5 0 013.5 2h1.148a1.5 1.5 0 011.465 1.175l.716 3.076a1.5 1.5 0 01-1.052 1.767l-.249.112a23.032 23.032 0 008.556 8.556l.112-.249a1.5 1.5 0 011.767-1.052l3.076.716A1.5 1.5 0 0118 15.352V16.5a1.5 1.5 0 01-1.5 1.5H15c-5.523 0-10-4.477-10-10S4.477 3 9.5 3H11a1.5 1.5 0 010 3H9.5c-3.866 0-7 3.134-7 7z" clip-rule="evenodd" /></svg>
+                  Telepon:
+                </h3>
+                <a href="tel:+62XXXXXXXXX" class="hover:text-sky-500 dark:hover:text-sky-400">(0518) XXX-XXX</a> (Ganti dengan nomor valid)
+              </div>
+              <div>
+                <h3 class="font-medium text-slate-700 dark:text-slate-200 text-lg flex items-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 mr-2 text-sky-500 dark:text-sky-400"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-13a.75.75 0 00-1.5 0v5c0 .414.336.75.75.75h4a.75.75 0 000-1.5h-3.25V5z" clip-rule="evenodd" /></svg>
+                  Jam Operasional Kantor:
+                </h3>
+                <p>Senin - Jumat: 07.30 - 15.00 WITA</p>
+                <p>Sabtu: 07.30 - 12.00 WITA (Opsional)</p>
+              </div>
+            </div>
+          </div>
+        </AnimatedSection>
+
+        <AnimatedSection animationType="slide-left" delay={400}>
+          <div class="bg-white dark:bg-slate-700 shadow-xl rounded-lg p-6 md:p-8">
+            <h2 class="text-2xl font-semibold text-slate-800 dark:text-slate-100 mb-6">Kirim Pesan Langsung</h2>
+            <form action="#" method="POST" class="space-y-6">
+              <div>
+                <label for="name" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Nama Lengkap</label>
+                <input type="text" name="name" id="name" autocomplete="name" required class="mt-1 block w-full px-3 py-2 bg-white dark:bg-slate-600 border border-slate-300 dark:border-slate-500 rounded-md shadow-sm focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm placeholder-slate-400 dark:placeholder-slate-400">
+              </div>
+              <div>
+                <label for="email" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Email</label>
+                <input type="email" name="email" id="email" autocomplete="email" required class="mt-1 block w-full px-3 py-2 bg-white dark:bg-slate-600 border border-slate-300 dark:border-slate-500 rounded-md shadow-sm focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm placeholder-slate-400 dark:placeholder-slate-400">
+              </div>
+              <div>
+                <label for="subject" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Subjek</label>
+                <input type="text" name="subject" id="subject" autocomplete="off" required class="mt-1 block w-full px-3 py-2 bg-white dark:bg-slate-600 border border-slate-300 dark:border-slate-500 rounded-md shadow-sm focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm placeholder-slate-400 dark:placeholder-slate-400">
+              </div>
+              <div>
+                <label for="message" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Pesan Anda</label>
+                <textarea id="message" name="message" rows="4" required class="mt-1 block w-full px-3 py-2 bg-white dark:bg-slate-600 border border-slate-300 dark:border-slate-500 rounded-md shadow-sm focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm placeholder-slate-400 dark:placeholder-slate-400"></textarea>
+              </div>
+              <div>
+                <button type="submit" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-sky-600 hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500 dark:bg-sky-500 dark:hover:bg-sky-600 transition-colors duration-300 transform hover:scale-105">
+                  Kirim Pesan
+                </button>
+              </div>
+              <p class="text-xs text-center text-slate-500 dark:text-slate-400">Form ini hanya demonstrasi. Integrasi backend (misal: Supabase Functions atau layanan email) diperlukan agar berfungsi.</p>
+            </form>
+          </div>
+        </AnimatedSection>
+      </div>
+
+      <AnimatedSection animationType="fade-up" delay={600}>
+        <div class="mt-16 md:mt-20">
+          <h2 class="text-2xl md:text-3xl font-semibold text-center text-slate-800 dark:text-slate-100 mb-8">Lokasi Kami di Peta</h2>
+          <div class="aspect-w-16 aspect-h-9 bg-slate-200 dark:bg-slate-600 rounded-lg shadow-xl overflow-hidden">
+            {/* Ganti dengan iframe Google Maps yang valid */}
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3984.990749189764!2d115.66000000000001!3d-3.4000000000000004!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2de8b67100000001%3A0x8c0ff47e9910673f!2sSMK%20Muhammadiyah%20Satui!5e0!3m2!1sen!2sid!4vYOUR_MAP_EMBED_CODE"
+              width="100%"
+              height="450"
+              style="border:0;"
+              allowfullscreen=""
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+              title="Peta Lokasi SMKS Muhammadiyah Satui"
+            ></iframe>
+            <p class="p-4 text-sm text-center text-slate-500 dark:text-slate-400">
+              Catatan: Ganti URL src iframe di atas dengan kode embed Google Maps yang benar untuk SMKS Muhammadiyah Satui.
+              <a href="https://www.google.com/maps/place/SMK+Muhammadiyah+Satui/@-3.4430592,115.6637967,17z/data=!3m1!4b1!4m6!3m5!1s0x2de8b67100000001:0x8c0ff47e9910673f!8m2!3d-3.4430646!4d115.6663716!16s%2Fg%2F11g9_xps1d?entry=ttu" target="_blank" rel="noopener noreferrer" class="text-sky-600 hover:underline">Lihat di Google Maps</a>.
+            </p>
+          </div>
+        </div>
+      </AnimatedSection>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  /* Custom styles for contact page if needed */
+</style>

@@ -1,0 +1,103 @@
+---
+import Layout from '@layouts/Layout.astro';
+import AnimatedSection from '@components/AnimatedSection.astro';
+
+// Data Testimoni (sementara, nanti dari Supabase)
+const testimoniData = [
+  {
+    id: 1,
+    nama: "Alumni Sukses 1",
+    jabatan: "Software Engineer di Perusahaan X",
+    foto: "/images/placeholders/alumni-1.jpg", // Ganti dengan path foto
+    kutipan: "SMKS Muhammadiyah Satui memberikan dasar yang kuat bagi karir saya di bidang teknologi. Guru-gurunya sangat mendukung dan fasilitasnya memadai.",
+    tahunLulus: 2020,
+    jurusan: "TKJ"
+  },
+  {
+    id: 2,
+    nama: "Orang Tua Siswa Y",
+    jabatan: "Wiraswasta",
+    foto: "/images/placeholders/ortu-1.jpg",
+    kutipan: "Anak saya berkembang pesat baik secara akademik maupun karakter sejak bersekolah di sini. Lingkungan sekolahnya sangat positif.",
+    tahunLulus: null, // Atau status siswa saat ini
+    jurusan: "AKL"
+  },
+  {
+    id: 3,
+    nama: "Mitra Industri Z",
+    jabatan: "HRD Manager PT. ABC",
+    foto: "/images/placeholders/mitra-1.jpg",
+    kutipan: "Lulusan SMKS Muhammadiyah Satui yang kami rekrut menunjukkan etos kerja yang baik dan keterampilan yang relevan dengan kebutuhan industri.",
+    tahunLulus: null,
+    jurusan: "MPLB"
+  },
+  // Tambahkan data testimoni lainnya
+];
+
+// Placeholder untuk gambar
+const placeholderImageDir = "public/images/placeholders";
+---
+
+<Layout title="Testimoni">
+  <section class="py-12 md:py-20 bg-sky-50 dark:bg-slate-800">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+      <AnimatedSection animationType="fade-up">
+        <h1 class="text-4xl md:text-5xl font-bold text-center text-sky-600 dark:text-sky-400 mb-12" transition:name="page-title-testimoni">
+          Apa Kata Mereka Tentang Kami?
+        </h1>
+        <p class="text-center text-lg text-slate-600 dark:text-slate-300 max-w-2xl mx-auto mb-16">
+          Dengarkan pengalaman dari para alumni, orang tua siswa, dan mitra industri kami.
+        </p>
+      </AnimatedSection>
+
+      <div class="grid md:grid-cols-1 lg:grid-cols-2 gap-8 md:gap-10">
+        {testimoniData.map((testi, index) => (
+          <AnimatedSection animationType="fade-up" delay={index * 150}>
+            <figure class="bg-white dark:bg-slate-700 p-6 md:p-8 rounded-xl shadow-xl h-full flex flex-col">
+              <blockquote class="flex-grow text-slate-600 dark:text-slate-300 italic text-lg border-l-4 border-sky-500 dark:border-sky-400 pl-6 mb-6">
+                <p>"{testi.kutipan}"</p>
+              </blockquote>
+              <figcaption class="flex items-center space-x-4">
+                <img
+                  src={testi.foto}
+                  alt={`Foto ${testi.nama}`}
+                  class="w-16 h-16 rounded-full object-cover shadow-md"
+                  loading="lazy"
+                  transition:name={`testimoni-foto-${testi.id}`}
+                />
+                <div>
+                  <div class="font-semibold text-slate-800 dark:text-slate-100" transition:name={`testimoni-nama-${testi.id}`}>{testi.nama}</div>
+                  <div class="text-sm text-slate-500 dark:text-slate-400">
+                    {testi.jabatan}
+                    {testi.tahunLulus && `, Lulusan ${testi.jurusan} ${testi.tahunLulus}`}
+                    {!testi.tahunLulus && testi.jurusan && `, Terkait Program ${testi.jurusan}`}
+                  </div>
+                </div>
+              </figcaption>
+            </figure>
+          </AnimatedSection>
+        ))}
+      </div>
+       <AnimatedSection animationType="fade-up" delay={testimoniData.length * 150 + 200}>
+        <div class="mt-16 text-center">
+            <a href="/kontak#form-pesan" class="bg-sky-500 hover:bg-sky-600 text-white font-semibold px-8 py-3 rounded-lg shadow-lg hover:shadow-sky-500/40 transform hover:scale-105 transition duration-300">
+                Bagikan Pengalaman Anda
+            </a>
+        </div>
+      </AnimatedSection>
+    </div>
+  </section>
+
+  {/* Placeholder untuk gambar agar direktori dibuat */}
+  <Fragment set:html={`
+    <div style="display:none;">
+      <img src="/images/placeholders/alumni-1.jpg" alt="placeholder">
+      <img src="/images/placeholders/ortu-1.jpg" alt="placeholder">
+      <img src="/images/placeholders/mitra-1.jpg" alt="placeholder">
+    </div>
+  `} />
+</Layout>
+
+<style>
+  /* Custom styles for testimoni page if needed */
+</style>
