@@ -1,0 +1,101 @@
+---
+import Layout from '@layouts/Layout.astro';
+import AnimatedSection from '@components/AnimatedSection.astro';
+---
+
+<Layout title="Tentang Kami">
+  <section class="py-12 md:py-20 bg-sky-50 dark:bg-slate-800">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+      <AnimatedSection animationType="fade-up">
+        <h1 class="text-4xl md:text-5xl font-bold text-center text-sky-600 dark:text-sky-400 mb-12" transition:name="page-title-tentang">
+          Tentang SMKS Muhammadiyah Satui
+        </h1>
+      </AnimatedSection>
+
+      <AnimatedSection animationType="fade-up" delay={200}>
+        <div class="bg-white dark:bg-slate-700 shadow-xl rounded-lg p-6 md:p-10 mb-12">
+          <h2 class="text-2xl md:text-3xl font-semibold text-slate-800 dark:text-slate-100 mb-6">Sejarah Singkat</h2>
+          <div class="prose prose-lg dark:prose-invert max-w-none text-slate-600 dark:text-slate-300 space-y-4">
+            <p>
+              SMKS Muhammadiyah Satui didirikan pada tahun [TAHUN BERDIRI] dengan semangat untuk memberikan pendidikan kejuruan yang berkualitas dan berlandaskan nilai-nilai Islam bagi putra-putri di wilayah Satui dan sekitarnya. Berawal dari [CERITA AWAL PENDIRIAN, MISALNYA JUMLAH JURUSAN ATAU SISWA AWAL], sekolah kami terus berkembang dan berinovasi.
+            </p>
+            <p>
+              Seiring berjalannya waktu, kami telah menambah berbagai program keahlian, meningkatkan fasilitas, dan menjalin kerjasama dengan dunia usaha dan industri (DUDI) untuk memastikan lulusan kami siap kerja dan kompetitif. Kami bangga telah meluluskan ribuan alumni yang berkontribusi di berbagai sektor.
+            </p>
+            <p>
+              Perjalanan panjang ini tidak lepas dari dukungan persyarikatan Muhammadiyah, pemerintah, masyarakat, serta dedikasi para guru dan staf. Kami berkomitmen untuk terus menjadi lembaga pendidikan yang unggul dan menjadi pilihan utama.
+            </p>
+            <!-- Tambahkan paragraf sejarah lainnya jika ada -->
+          </div>
+        </div>
+      </AnimatedSection>
+
+      <AnimatedSection animationType="fade-up" delay={400}>
+        <div class="bg-white dark:bg-slate-700 shadow-xl rounded-lg p-6 md:p-10 mb-12">
+          <h2 class="text-2xl md:text-3xl font-semibold text-slate-800 dark:text-slate-100 mb-6">Visi Sekolah</h2>
+          <blockquote class="border-l-4 border-sky-500 dark:border-sky-400 pl-6 py-2 italic text-slate-700 dark:text-slate-200 text-lg md:text-xl">
+            "[ISI VISI SEKOLAH DI SINI. Contoh: Menjadi SMK unggul yang menghasilkan lulusan berakhlak mulia, kompeten, mandiri, dan mampu bersaing di era global.]"
+          </blockquote>
+        </div>
+      </AnimatedSection>
+
+      <AnimatedSection animationType="fade-up" delay={600}>
+        <div class="bg-white dark:bg-slate-700 shadow-xl rounded-lg p-6 md:p-10">
+          <h2 class="text-2xl md:text-3xl font-semibold text-slate-800 dark:text-slate-100 mb-6">Misi Sekolah</h2>
+          <ul class="list-disc list-inside space-y-3 text-slate-600 dark:text-slate-300 prose prose-lg dark:prose-invert max-w-none">
+            <li>[MISI 1. Contoh: Menyelenggarakan pendidikan kejuruan yang berkualitas sesuai standar nasional dan kebutuhan industri.]</li>
+            <li>[MISI 2. Contoh: Mengembangkan potensi peserta didik secara optimal melalui kegiatan pembelajaran yang inovatif dan kreatif.]</li>
+            <li>[MISI 3. Contoh: Menanamkan nilai-nilai keislaman dan karakter bangsa dalam setiap aspek kegiatan sekolah.]</li>
+            <li>[MISI 4. Contoh: Membangun kerjasama yang sinergis dengan orang tua, masyarakat, dan dunia usaha/industri.]</li>
+            <li>[MISI 5. Contoh: Meningkatkan kualitas sumber daya manusia (guru dan staf) secara berkelanjutan.]</li>
+            <!-- Tambahkan misi lainnya -->
+          </ul>
+        </div>
+      </AnimatedSection>
+    </div>
+  </section>
+
+  <section class="py-12 md:py-20 bg-white dark:bg-slate-700">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+        <AnimatedSection animationType="zoom-in">
+            <h2 class="text-3xl md:text-4xl font-bold text-center text-slate-800 dark:text-slate-100 mb-12">
+                Mengapa Memilih Kami?
+            </h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {[
+                    { title: "Pendidikan Islami", description: "Pembinaan karakter berlandaskan nilai-nilai Al-Islam dan Kemuhammadiyahan.", icon: "academic-cap" },
+                    { title: "Link & Match Industri", description: "Kerjasama erat dengan DUDI untuk sinkronisasi kurikulum dan penyaluran lulusan.", icon: "briefcase" },
+                    { title: "Ekstrakurikuler Beragam", description: "Wadah pengembangan minat dan bakat siswa di berbagai bidang.", icon: "puzzle-piece" },
+                    { title: "Lingkungan Belajar Kondusif", description: "Suasana belajar yang aman, nyaman, dan mendukung prestasi.", icon: "building-library" },
+                    { title: "Beasiswa Prestasi", description: "Apresiasi dan dukungan bagi siswa berprestasi dan kurang mampu.", icon: "gift" },
+                    { title: "Alumni Kompeten", description: "Jejak alumni yang sukses di berbagai perusahaan dan wirausaha.", icon: "users" }
+                ].map(item => (
+                    <div class="bg-slate-50 dark:bg-slate-600 p-6 rounded-xl shadow-lg hover:shadow-sky-200/50 dark:hover:shadow-sky-700/50 transition-shadow duration-300 transform hover:-translate-y-1">
+                        {/* Placeholder untuk ikon, bisa diganti dengan SVG atau FontAwesome jika diintegrasikan */}
+                        <div class="text-sky-500 dark:text-sky-400 mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10">
+                                { item.icon === "academic-cap" && <path stroke-linecap="round" stroke-linejoin="round" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342M6.75 15a.75.75 0 100-1.5.75.75 0 000 1.5zm0 0v-3.675A55.378 55.378 0 0112 8.443m-7.007 11.55A5.981 5.981 0 006.75 15.75v-1.5" /> }
+                                { item.icon === "briefcase" && <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 14.15v4.073a2.25 2.25 0 01-2.25 2.25h-12a2.25 2.25 0 01-2.25-2.25v-4.073M15.75 10.5h-7.5M15.75 10.5V6.75a3 3 0 00-3-3h-1.5a3 3 0 00-3 3v3.75m7.5 0v3.375c0 .621-.504 1.125-1.125 1.125h-5.25c-.621 0-1.125-.504-1.125-1.125v-3.375" /> }
+                                { item.icon === "puzzle-piece" && <path stroke-linecap="round" stroke-linejoin="round" d="M14.25 6.087c0-.596.484-1.08 1.08-1.08H16.5a2.25 2.25 0 012.25 2.25v1.586c0 .596-.484 1.08-1.08 1.08H16.5a1.08 1.08 0 00-1.08-1.08v-1.724a1.08 1.08 0 00-1.08-1.08h-.09Z" /> } {/* Simplified, find better icon */}
+                                { item.icon === "building-library" && <path stroke-linecap="round" stroke-linejoin="round" d="M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6m-1.5 12V10.332A48.36 48.36 0 0012 9.75c-2.551 0-5.056.2-7.5.582V21M3 21h18M12 6.75h.008v.008H12V6.75z" /> }
+                                { item.icon === "gift" && <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-6.364-.386l1.591-1.591M3 12h2.25m.386-6.364l1.591 1.591" /> } {/* Simplified, find better icon */}
+                                { item.icon === "users" && <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" /> }
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-slate-800 dark:text-slate-200 mb-2">{item.title}</h3>
+                        <p class="text-slate-600 dark:text-slate-300 text-sm">{item.description}</p>
+                    </div>
+                ))}
+            </div>
+        </AnimatedSection>
+    </div>
+  </section>
+
+</Layout>
+
+<style is:global>
+  /* Styling untuk prose agar lebih menarik jika diperlukan */
+  .prose ul > li::before {
+    @apply bg-sky-500 dark:bg-sky-400;
+  }
+</style>

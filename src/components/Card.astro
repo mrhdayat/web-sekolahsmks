@@ -1,0 +1,136 @@
+---
+// src/components/Card.astro
+interface Props {
+  title: string;
+  description?: string;
+  imageUrl?: string;
+  imageAlt?: string;
+  tags?: string[];
+  href?: string; // Link untuk seluruh card jika ada
+  themeColor?: 'sky' | 'emerald' | 'amber' | 'rose' | 'slate' | 'indigo'; // Warna tema untuk aksen
+  className?: string;
+}
+
+const {
+  title,
+  description,
+  imageUrl,
+  imageAlt = "Card image",
+  tags,
+  href,
+  themeColor = 'sky',
+  className
+} = Astro.props;
+
+const Tag = href ? 'a' : 'div';
+
+const colorClasses = {
+  sky: {
+    bg: 'bg-sky-500',
+    hoverBg: 'hover:bg-sky-600',
+    border: 'border-sky-500',
+    text: 'text-sky-600 dark:text-sky-400',
+    tagBg: 'bg-sky-100 dark:bg-sky-900 text-sky-700 dark:text-sky-300',
+    shadow: 'hover:shadow-sky-500/30 dark:hover:shadow-sky-500/20'
+  },
+  emerald: {
+    bg: 'bg-emerald-500',
+    hoverBg: 'hover:bg-emerald-600',
+    border: 'border-emerald-500',
+    text: 'text-emerald-600 dark:text-emerald-400',
+    tagBg: 'bg-emerald-100 dark:bg-emerald-900 text-emerald-700 dark:text-emerald-300',
+    shadow: 'hover:shadow-emerald-500/30 dark:hover:shadow-emerald-500/20'
+  },
+  amber: {
+    bg: 'bg-amber-500',
+    hoverBg: 'hover:bg-amber-600',
+    border: 'border-amber-500',
+    text: 'text-amber-600 dark:text-amber-400',
+    tagBg: 'bg-amber-100 dark:bg-amber-900 text-amber-700 dark:text-amber-300',
+    shadow: 'hover:shadow-amber-500/30 dark:hover:shadow-amber-500/20'
+  },
+  rose: {
+    bg: 'bg-rose-500',
+    hoverBg: 'hover:bg-rose-600',
+    border: 'border-rose-500',
+    text: 'text-rose-600 dark:text-rose-400',
+    tagBg: 'bg-rose-100 dark:bg-rose-900 text-rose-700 dark:text-rose-300',
+    shadow: 'hover:shadow-rose-500/30 dark:hover:shadow-rose-500/20'
+  },
+  slate: {
+    bg: 'bg-slate-500',
+    hoverBg: 'hover:bg-slate-600',
+    border: 'border-slate-500',
+    text: 'text-slate-600 dark:text-slate-400',
+    tagBg: 'bg-slate-200 dark:bg-slate-600 text-slate-700 dark:text-slate-300',
+    shadow: 'hover:shadow-slate-500/30 dark:hover:shadow-slate-500/20'
+  },
+  indigo: {
+    bg: 'bg-indigo-500',
+    hoverBg: 'hover:bg-indigo-600',
+    border: 'border-indigo-500',
+    text: 'text-indigo-600 dark:text-indigo-400',
+    tagBg: 'bg-indigo-100 dark:bg-indigo-900 text-indigo-700 dark:text-indigo-300',
+    shadow: 'hover:shadow-indigo-500/30 dark:hover:shadow-indigo-500/20'
+  }
+};
+
+const currentTheme = colorClasses[themeColor] || colorClasses.sky;
+---
+
+<Tag
+  href={href}
+  class:list={[
+    "card block bg-white dark:bg-slate-700 rounded-xl shadow-lg overflow-hidden transition-all duration-300 ease-in-out transform hover:-translate-y-1",
+    currentTheme.shadow,
+    className
+  ]}
+  data-theme-color={themeColor}
+>
+  {imageUrl && (
+    <div class="relative h-48 md:h-56 w-full overflow-hidden">
+      <img
+        src={imageUrl}
+        alt={imageAlt}
+        class="w-full h-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-110"
+        loading="lazy"
+        transition:name={imageUrl}
+      />
+      {/* Overlay effect (optional) */}
+      {/* <div class={`absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent`}></div> */}
+    </div>
+  )}
+  <div class="p-5 md:p-6 flex flex-col flex-grow">
+    <h3 class:list={["text-xl md:text-2xl font-bold mb-2", currentTheme.text]}>
+      {title}
+    </h3>
+    {description && (
+      <p class="text-slate-600 dark:text-slate-300 text-sm md:text-base leading-relaxed mb-4 flex-grow">
+        {description}
+      </p>
+    )}
+    {tags && tags.length > 0 && (
+      <div class="mt-3 mb-1 flex flex-wrap gap-2">
+        {tags.map(tag => (
+          <span class:list={["text-xs font-semibold px-2.5 py-0.5 rounded-full", currentTheme.tagBg]}>
+            {tag}
+          </span>
+        ))}
+      </div>
+    )}
+    {/* Slot untuk konten tambahan seperti tombol */}
+    <div class="card-actions mt-auto">
+        <slot />
+    </div>
+  </div>
+</Tag>
+
+<style>
+  .card {
+    /* Base styles for card */
+  }
+  /* Tambahkan group-hover pada parent jika ingin efek pada image bekerja saat hover di card */
+  .card:hover img {
+    transform: scale(1.05);
+  }
+</style>

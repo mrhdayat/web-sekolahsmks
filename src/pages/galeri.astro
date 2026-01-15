@@ -1,0 +1,207 @@
+---
+import Layout from '@layouts/Layout.astro';
+import AnimatedSection from '@components/AnimatedSection.astro';
+import GalleryItem from '@components/GalleryItem.astro';
+
+const galleryImages = [
+  { id: 1, src: "/images/placeholders/galeri-1.jpg", alt: "Kegiatan Belajar Mengajar di Kelas", title: "Suasana Kelas", category: "Kegiatan Belajar" },
+  { id: 2, src: "/images/placeholders/galeri-2.jpg", alt: "Praktik di Laboratorium TKJ", title: "Praktik TKJ", category: "Praktikum" },
+  { id: 3, src: "/images/placeholders/galeri-3.jpg", alt: "Upacara Bendera Hari Senin", title: "Upacara Bendera", category: "Kegiatan Sekolah" },
+  { id: 4, src: "/images/placeholders/galeri-4.jpg", alt: "Kegiatan Ekstrakurikuler Pramuka", title: "Pramuka", category: "Ekstrakurikuler" },
+  { id: 5, src: "/images/placeholders/galeri-5.jpg", alt: "Prestasi Siswa Lomba Coding", title: "Juara Coding", category: "Prestasi" },
+  { id: 6, src: "/images/placeholders/galeri-6.jpg", alt: "Perpustakaan Sekolah", title: "Perpustakaan", category: "Fasilitas" },
+  { id: 7, src: "/images/placeholders/galeri-7.jpg", alt: "Workshop Industri", title: "Workshop", category: "Kegiatan Sekolah" },
+  { id: 8, src: "/images/placeholders/galeri-8.jpg", alt: "Kelulusan Angkatan 2023", title: "Kelulusan 2023", category: "Acara" },
+  { id: 9, src: "/images/placeholders/galeri-9.jpg", alt: "Kerja Bakti Lingkungan Sekolah", title: "Kerja Bakti", category: "Kegiatan Sekolah" },
+];
+
+const categories = ["Semua", ...new Set(galleryImages.map(img => img.category))];
+const placeholderImageDir = "public/images/placeholders";
+---
+
+<Layout title="Galeri Sekolah">
+  <section class="py-12 md:py-20 bg-sky-50 dark:bg-slate-800">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+      <AnimatedSection animationType="fade-up">
+        <h1 class="text-4xl md:text-5xl font-bold text-center text-sky-600 dark:text-sky-400 mb-8" transition:name="page-title-galeri">
+          Galeri Kegiatan Sekolah
+        </h1>
+        <p class="text-center text-lg text-slate-600 dark:text-slate-300 max-w-2xl mx-auto mb-12">
+          Lihat berbagai momen dan kegiatan menarik yang telah berlangsung di SMKS Muhammadiyah Satui.
+        </p>
+      </AnimatedSection>
+
+      <AnimatedSection animationType="fade-up" delay={200}>
+        <div class="flex justify-center flex-wrap gap-2 mb-12" id="gallery-filters">
+          {categories.map(category => (
+            <button class:list={[
+              "px-4 py-2 text-sm font-medium rounded-full transition-colors duration-200",
+              category === "Semua"
+                ? "bg-sky-500 text-white dark:bg-sky-600"
+                : "bg-white dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-sky-100 dark:hover:bg-slate-600"
+            ]}
+            data-filter={category === "Semua" ? "semua" : category.toLowerCase().replace(/\s+/g, '-')}
+            >
+              {category}
+            </button>
+          ))}
+        </div>
+      </AnimatedSection>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6" id="gallery-container">
+        {galleryImages.map((image, index) => (
+          <AnimatedSection
+            animationType="zoom-in"
+            delay={index * 75}
+            className="gallery-item-wrapper"
+            data-category={image.category.toLowerCase().replace(/\s+/g, '-')}
+          >
+            <GalleryItem
+              src={image.src}
+              alt={image.alt}
+              title={image.title}
+              category={image.category}
+              transition:name={`gallery-image-${image.id}`}
+            />
+          </AnimatedSection>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <Fragment set:html={`
+    <div style="display:none;">
+      ${galleryImages.map(img => `<img src="${img.src}" alt="placeholder">`).join('')}
+    </div>
+  `} />
+</Layout>
+
+<style>
+</style>
+
+<script>
+  function initializeGallery() {
+    // --- Gallery Filter Logic ---
+    const filterContainer = document.getElementById('gallery-filters');
+    if (!filterContainer) return; // Exit if no filter container
+
+    const filterButtons = filterContainer.querySelectorAll('[data-filter]');
+    const galleryItemsWrappers = document.querySelectorAll('#gallery-container .gallery-item-wrapper');
+    let activeFilter = 'semua';
+
+    filterButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        filterButtons.forEach(btn => {
+          btn.classList.remove('bg-sky-500', 'text-white', 'dark:bg-sky-600');
+          btn.classList.add('bg-white', 'dark:bg-slate-700', 'text-slate-700', 'dark:text-slate-300', 'hover:bg-sky-100', 'dark:hover:bg-slate-600');
+        });
+        button.classList.add('bg-sky-500', 'text-white', 'dark:bg-sky-600');
+        button.classList.remove('bg-white', 'dark:bg-slate-700', 'text-slate-700', 'dark:text-slate-300', 'hover:bg-sky-100', 'dark:hover:bg-slate-600');
+
+        activeFilter = button.getAttribute('data-filter');
+
+        galleryItemsWrappers.forEach(itemWrapper => {
+          const itemCategory = itemWrapper.getAttribute('data-category');
+          if (activeFilter === 'semua' || itemCategory === activeFilter) {
+            itemWrapper.style.display = 'block';
+            // Optional: re-trigger animation if desired (can be complex)
+            // itemWrapper.classList.remove('opacity-0', 'intersected');
+            // const animationClass = Array.from(itemWrapper.classList).find(cls => cls.startsWith('animate-'));
+            // if(animationClass) {
+            //   itemWrapper.classList.remove(animationClass);
+            //   void itemWrapper.offsetWidth;
+            //   itemWrapper.classList.add(animationClass, 'opacity-0');
+            // }
+          } else {
+            itemWrapper.style.display = 'none';
+          }
+        });
+        // Update items for lightbox after filtering
+        setTimeout(updateVisibleLightboxItems, 50);
+      });
+    });
+
+    // --- Lightbox Logic ---
+    const lightboxModal = document.getElementById('lightbox-modal');
+    const lightboxImage = document.getElementById('lightbox-image');
+    const lightboxCaption = document.getElementById('lightbox-caption');
+    const lightboxCloseBtn = document.getElementById('lightbox-close');
+    const lightboxPrevBtn = document.getElementById('lightbox-prev');
+    const lightboxNextBtn = document.getElementById('lightbox-next');
+
+    if (!lightboxModal || !lightboxImage || !lightboxCaption || !lightboxCloseBtn || !lightboxPrevBtn || !lightboxNextBtn) {
+      // console.warn('Lightbox elements not found. Lightbox will not function.');
+      return;
+    }
+
+    let currentImageIndex = -1;
+    let visibleLightboxItems = [];
+
+    function updateVisibleLightboxItems() {
+        visibleLightboxItems = Array.from(document.querySelectorAll('[data-gallery-item]'))
+            .filter(item => {
+                const wrapper = item.closest('.gallery-item-wrapper');
+                return wrapper ? wrapper.style.display !== 'none' : item.style.display !== 'none';
+            });
+    }
+
+    function openLightbox(index) {
+      if (index < 0 || index >= visibleLightboxItems.length) return;
+
+      currentImageIndex = index;
+      const item = visibleLightboxItems[index];
+      const imgSrc = item.getAttribute('data-src');
+      const imgTitle = item.getAttribute('data-title') || item.querySelector('img')?.alt || '';
+
+      lightboxImage.setAttribute('src', imgSrc);
+      lightboxImage.setAttribute('alt', imgTitle);
+      lightboxCaption.textContent = imgTitle;
+
+      lightboxModal.classList.remove('hidden');
+      lightboxModal.setAttribute('data-state', 'open'); // Untuk animasi CSS
+      document.body.style.overflow = 'hidden';
+
+      lightboxPrevBtn.style.display = (index === 0) ? 'none' : 'inline-flex';
+      lightboxNextBtn.style.display = (index === visibleLightboxItems.length - 1) ? 'none' : 'inline-flex';
+    }
+
+    // Event listeners untuk setiap item galeri (di dalam wrapper)
+    galleryItemsWrappers.forEach(wrapper => {
+        const galleryClickableItem = wrapper.querySelector('[data-gallery-item]');
+        if (galleryClickableItem) {
+            galleryClickableItem.addEventListener('click', () => {
+                updateVisibleLightboxItems();
+                const itemIndex = visibleLightboxItems.indexOf(galleryClickableItem);
+                if (itemIndex !== -1) {
+                    openLightbox(itemIndex);
+                }
+            });
+        }
+    });
+
+    function closeModal() {
+      lightboxModal.classList.add('hidden');
+      lightboxModal.setAttribute('data-state', 'closed');
+      lightboxImage.setAttribute('src', '');
+      document.body.style.overflow = '';
+    }
+
+    lightboxCloseBtn.addEventListener('click', closeModal);
+    lightboxModal.addEventListener('click', (e) => {
+      if (e.target === lightboxModal) closeModal();
+    });
+    lightboxPrevBtn.addEventListener('click', () => openLightbox(currentImageIndex - 1));
+    lightboxNextBtn.addEventListener('click', () => openLightbox(currentImageIndex + 1));
+
+    document.addEventListener('keydown', (e) => {
+      if (lightboxModal.getAttribute('data-state') === 'closed') return;
+      if (e.key === "Escape") closeModal();
+      if (e.key === "ArrowLeft") lightboxPrevBtn.click(); // Trigger click agar logic index check jalan
+      if (e.key === "ArrowRight") lightboxNextBtn.click(); // Trigger click
+    });
+
+    updateVisibleLightboxItems(); // Inisialisasi daftar item yang visible
+  }
+
+  document.addEventListener('astro:page-load', initializeGallery);
+</script>

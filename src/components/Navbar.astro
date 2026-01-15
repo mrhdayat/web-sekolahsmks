@@ -1,0 +1,175 @@
+---
+// src/components/Navbar.astro
+const navLinks = [
+  { href: "/", label: "Beranda" },
+  { href: "/tentang", label: "Tentang" },
+  { href: "/program", label: "Program" }, // Menggabungkan Fasilitas, Ekstrakurikuler
+  { href: "/guru", label: "Guru" },
+  { href: "/galeri", label: "Galeri" },
+  { href: "/kontak", label: "Kontak" },
+  // { href: "/admin/login", label: "Admin Login", class:"md:hidden"} // Untuk mobile jika diperlukan
+];
+
+const currentPath = Astro.url.pathname;
+---
+
+<header id="main-header" class="fixed top-0 left-0 right-0 z-40 transition-all duration-300 ease-in-out">
+  <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-16 md:h-20">
+      <div class="flex-shrink-0">
+        <a href="/" class="flex items-center space-x-2 text-xl md:text-2xl font-bold text-sky-600 dark:text-sky-400 hover:opacity-80 transition-opacity" transition:name="site-logo">
+          <img src="/favicon.svg" alt="Logo SMKS Muhammadiyah Satui" class="h-8 w-8 md:h-10 md:w-10" />
+          <span>SMKS Muh Satui</span>
+        </a>
+      </div>
+      <div class="hidden md:flex md:items-center md:space-x-2 lg:space-x-4">
+        {navLinks.map(link => (
+          <a
+            href={link.href}
+            class:list={[
+              "px-3 py-2 rounded-md text-sm font-medium transition-colors duration-150",
+              currentPath === link.href
+                ? "bg-sky-500 text-white dark:bg-sky-600"
+                : "text-slate-700 dark:text-slate-300 hover:bg-sky-100 dark:hover:bg-slate-700 hover:text-sky-600 dark:hover:text-sky-300",
+              link.class
+            ]}
+            aria-current={currentPath === link.href ? "page" : false}
+            transition:name={`nav-${link.label.toLowerCase()}`}
+          >
+            {link.label}
+          </a>
+        ))}
+        <a href="/admin/login" class="ml-4 px-3 py-2 rounded-md text-sm font-medium text-white bg-gradient-to-r from-sky-500 to-cyan-500 hover:from-sky-600 hover:to-cyan-600 transition-all transform hover:scale-105">
+          Admin
+        </a>
+      </div>
+      <div class="md:hidden flex items-center">
+        <button id="mobile-menu-button" type="button" class="inline-flex items-center justify-center p-2 rounded-md text-slate-600 dark:text-slate-300 hover:text-sky-600 dark:hover:text-sky-400 hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-sky-500" aria-controls="mobile-menu" aria-expanded="false">
+          <span class="sr-only">Open main menu</span>
+          <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+          <svg class="hidden h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Mobile menu, show/hide based on menu state. -->
+  <div class="md:hidden hidden" id="mobile-menu">
+    <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white dark:bg-slate-800/90 backdrop-blur-sm shadow-lg rounded-b-lg">
+      {navLinks.map(link => (
+        <a
+          href={link.href}
+          class:list={[
+            "block px-3 py-2 rounded-md text-base font-medium",
+            currentPath === link.href
+              ? "bg-sky-500 text-white dark:bg-sky-600"
+              : "text-slate-700 dark:text-slate-300 hover:bg-sky-100 dark:hover:bg-slate-700 hover:text-sky-600 dark:hover:text-sky-300",
+            link.class
+          ]}
+          aria-current={currentPath === link.href ? "page" : false}
+          transition:name={`mobile-nav-${link.label.toLowerCase()}`}
+        >
+          {link.label}
+        </a>
+      ))}
+      <a href="/admin/login" class="block px-3 py-2 rounded-md text-base font-medium text-white bg-sky-500 hover:bg-sky-600">
+        Admin Login
+      </a>
+    </div>
+  </div>
+</header>
+
+<script>
+  const header = document.getElementById('main-header');
+  const mobileMenuButton = document.getElementById('mobile-menu-button');
+  const mobileMenu = document.getElementById('mobile-menu');
+  let lastScrollY = window.scrollY;
+
+  function toggleMobileMenu() {
+    const isExpanded = mobileMenuButton.getAttribute('aria-expanded') === 'true' || false;
+    mobileMenuButton.setAttribute('aria-expanded', !isExpanded);
+    mobileMenu.classList.toggle('hidden');
+    mobileMenu.classList.toggle('block'); // Or use more specific classes for animation
+    // Toggle icons
+    mobileMenuButton.querySelectorAll('svg').forEach(icon => icon.classList.toggle('hidden'));
+  }
+
+  mobileMenuButton.addEventListener('click', toggleMobileMenu);
+
+  // Close mobile menu on link click
+  mobileMenu.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      if (mobileMenu.classList.contains('block')) {
+        toggleMobileMenu();
+      }
+    });
+  });
+
+  window.addEventListener('scroll', () => {
+    const root = document.documentElement;
+    if (window.scrollY > 50) {
+      header.classList.add('bg-white/80', 'dark:bg-slate-800/80', 'backdrop-blur-md', 'shadow-lg');
+      header.classList.remove('md:h-20'); // h-20 is 5rem
+      header.classList.add('md:h-16');   // h-16 is 4rem
+      if (window.innerWidth >= 768) { // md breakpoint
+        root.style.setProperty('--navbar-current-height', 'var(--navbar-height-scrolled-desktop)');
+      }
+    } else {
+      header.classList.remove('bg-white/80', 'dark:bg-slate-800/80', 'backdrop-blur-md', 'shadow-lg');
+      header.classList.remove('md:h-16');
+      header.classList.add('md:h-20');
+      if (window.innerWidth >= 768) { // md breakpoint
+        root.style.setProperty('--navbar-current-height', 'var(--navbar-height-initial-desktop)');
+      }
+    }
+
+    // Hide navbar on scroll down, show on scroll up (optional)
+    // if (window.scrollY > lastScrollY && window.scrollY > 200) { // Scrolling down
+    //   header.style.transform = 'translateY(-100%)';
+    // } else { // Scrolling up
+    //   header.style.transform = 'translateY(0)';
+    // }
+    // lastScrollY = window.scrollY;
+  });
+
+  // Close mobile menu if an Astro navigation occurs (View Transitions)
+  document.addEventListener('astro:page-load', () => {
+    if (mobileMenu.classList.contains('block')) {
+      toggleMobileMenu();
+    }
+  });
+</script>
+
+<style>
+  /* Ensure the content is not overlapped by the fixed navbar */
+  :root {
+    --navbar-height-initial-desktop: 5rem; /* 80px */
+    --navbar-height-scrolled-desktop: 4rem; /* 64px */
+    --navbar-height-mobile: 4rem; /* 64px */
+    --navbar-current-height: var(--navbar-height-initial-desktop); /* Default for desktop */
+  }
+
+  body #app > main {
+    padding-top: var(--navbar-current-height);
+  }
+
+  @media (max-width: 767px) { /* Mobile */
+    :root {
+      /* On mobile, height is fixed, so current-height is just mobile height */
+      --navbar-current-height: var(--navbar-height-mobile);
+    }
+  }
+
+  /* Style for scroll-padding-top on html/body can use one of these variables,
+     preferably the larger one to avoid content being hidden on snap.
+     e.g., html { scroll-padding-top: var(--navbar-height-initial-desktop); }
+     Atau set via JS jika perlu lebih dinamis, tapi CSS lebih simpel.
+     Layout.astro sudah menggunakan --navbar-height-mobile untuk ini, bisa disesuaikan.
+     Untuk desktop, --navbar-height-initial-desktop (5rem) adalah yang terbesar.
+  */
+
+</style>

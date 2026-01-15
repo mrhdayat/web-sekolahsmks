@@ -1,0 +1,182 @@
+---
+// src/pages/admin/dashboard/guru/tambah.astro
+import AdminLayout from '@layouts/AdminLayout.astro';
+import { supabase } from '@lib/supabase';
+import type { Guru } from '@lib/supabase'; // Impor tipe Guru jika perlu untuk validasi
+
+let error: string | null = null;
+let formDataValues: Partial<Guru> = {
+    nama: '',
+    jabatan: '',
+    mapel: '',
+    quotes: '',
+    foto_url: '' // Untuk input file, kita akan handle upload ke Supabase Storage
+};
+
+if (Astro.request.method === 'POST') {
+  try {
+    const formData = await Astro.request.formData();
+
+    const nama = formData.get('nama') as string;
+    const jabatan = formData.get('jabatan') as string || null;
+    const mapel = formData.get('mapel') as string || null;
+    const quotes = formData.get('quotes') as string || null;
+    const fotoFile = formData.get('foto') as File; // Ambil file
+
+    formDataValues = { nama, jabatan, mapel, quotes }; // Simpan nilai untuk repopulate form
+
+    if (!nama) {
+      throw new Error('Nama guru harus diisi.');
+    }
+    if (!supabase) {
+      throw new Error('Supabase client tidak terinisialisasi.');
+    }
+
+    let fotoUrlToSave: string | null = null;
+
+    // Handle Upload Foto ke Supabase Storage
+    if (fotoFile && fotoFile.size > 0) {
+      if (fotoFile.size > 5 * 1024 * 1024) { // Batas 5MB
+          throw new Error('Ukuran file foto tidak boleh lebih dari 5MB.');
+      }
+      const fileExt = fotoFile.name.split('.').pop();
+      const fileName = `${Date.now()}.${fileExt}`;
+      const filePath = `guru-photos/${fileName}`; // Path di Supabase Storage
+
+      const { data: uploadData, error: uploadError } = await supabase.storage
+        .from('foto-sekolah') // Ganti dengan nama bucket Anda
+        .upload(filePath, fotoFile, {
+            cacheControl: '3600', // 1 jam
+            upsert: false // jangan timpa jika sudah ada (seharusnya tidak terjadi dengan Date.now())
+        });
+
+      if (uploadError) {
+        console.error('Supabase Storage Error:', uploadError);
+        throw new Error(`Gagal mengupload foto: ${uploadError.message}`);
+      }
+
+      // Dapatkan URL publik dari file yang diupload
+      const { data: publicUrlData } = supabase.storage
+        .from('foto-sekolah') // Ganti dengan nama bucket Anda
+        .getPublicUrl(filePath);
+
+      fotoUrlToSave = publicUrlData.publicUrl;
+    }
+
+    // Simpan data guru ke tabel 'guru'
+    const { data: insertData, error: insertError } = await supabase
+      .from('guru')
+      .insert([{
+        nama,
+        jabatan,
+        mapel,
+        quotes,
+        foto_url: fotoUrlToSave
+      }])
+      .select(); // select() untuk mendapatkan data yang baru saja diinsert
+
+    if (insertError) {
+      console.error('Supabase Insert Error:', insertError);
+      // Jika insert gagal tapi foto sudah terupload, idealnya foto dihapus dari storage.
+      // Untuk saat ini, kita biarkan.
+      throw new Error(`Gagal menyimpan data guru: ${insertError.message}`);
+    }
+
+    if (insertData) {
+      return Astro.redirect('/admin/dashboard/guru?message=Data guru berhasil ditambahkan.');
+    } else {
+      throw new Error('Gagal menyimpan data guru, tidak ada data yang dikembalikan.');
+    }
+
+  } catch (e: any) {
+    error = e.message || 'Terjadi kesalahan.';
+    console.error("Error adding guru:", e);
+  }
+}
+---
+<AdminLayout title="Tambah Data Guru" currentPage="/admin/dashboard/guru">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-2xl md:text-3xl font-bold text-slate-800 dark:text-slate-100">Tambah Guru Baru</h1>
+    <a href="/admin/dashboard/guru" class="btn-secondary bg-slate-200 hover:bg-slate-300 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 font-medium py-2 px-4 rounded-lg shadow hover:shadow-md transition-all duration-200 inline-flex items-center">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 mr-2">
+            <path fill-rule="evenodd" d="M17 10a.75.75 0 01-.75.75H5.56l2.72 2.72a.75.75 0 11-1.06 1.06l-4.25-4.25a.75.75 0 010-1.06l4.25-4.25a.75.75 0 111.06 1.06L5.56 9.25H16.25A.75.75 0 0117 10z" clip-rule="evenodd" />
+        </svg>
+      Kembali ke Daftar
+    </a>
+  </div>
+
+  {error && (
+    <div id="error-alert" class="bg-red-100 dark:bg-red-900/50 border border-red-400 dark:border-red-600 text-red-700 dark:text-red-300 px-4 py-3 rounded-md mb-6 relative" role="alert">
+      <strong class="font-bold">Error!</strong>
+      <span class="block sm:inline"> {error}</span>
+      <button onclick="document.getElementById('error-alert').remove()" class="absolute top-0 bottom-0 right-0 px-4 py-3 text-red-700 dark:text-red-300">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5"><path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" /></svg>
+      </button>
+    </div>
+  )}
+
+  <div class="bg-white dark:bg-slate-800 shadow-lg rounded-xl p-6 md:p-8">
+    <form method="POST" enctype="multipart/form-data" class="space-y-6">
+      <div>
+        <label for="nama" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Nama Lengkap <span class="text-red-500">*</span></label>
+        <input type="text" name="nama" id="nama" required value={formDataValues.nama}
+               class="mt-1 block w-full px-3 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-md shadow-sm placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm">
+      </div>
+
+      <div>
+        <label for="jabatan" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Jabatan</label>
+        <input type="text" name="jabatan" id="jabatan" value={formDataValues.jabatan}
+               class="mt-1 block w-full px-3 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-md shadow-sm placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm">
+      </div>
+
+      <div>
+        <label for="mapel" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Mata Pelajaran yang Diampu</label>
+        <input type="text" name="mapel" id="mapel" value={formDataValues.mapel}
+               class="mt-1 block w-full px-3 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-md shadow-sm placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm"
+               placeholder="Contoh: Matematika, Produktif TKJ">
+      </div>
+
+      <div>
+        <label for="quotes" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Kutipan/Moto (Opsional)</label>
+        <textarea name="quotes" id="quotes" rows="3"
+                  class="mt-1 block w-full px-3 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-md shadow-sm placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm">{formDataValues.quotes}</textarea>
+      </div>
+
+      <div>
+        <label for="foto" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Foto Guru (Opsional, Max 5MB)</label>
+        <input type="file" name="foto" id="foto" accept="image/jpeg, image/png, image/webp, image/gif"
+               class="mt-1 block w-full text-sm text-slate-500 dark:text-slate-400
+                      file:mr-4 file:py-2 file:px-4
+                      file:rounded-lg file:border-0
+                      file:text-sm file:font-semibold
+                      file:bg-sky-50 dark:file:bg-slate-700 file:text-sky-700 dark:file:text-sky-300
+                      hover:file:bg-sky-100 dark:hover:file:bg-slate-600 transition-colors cursor-pointer">
+        <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">Format yang didukung: JPG, PNG, WEBP, GIF.</p>
+      </div>
+
+      <div class="flex justify-end pt-4">
+        <a href="/admin/dashboard/guru" class="btn-secondary mr-3 bg-slate-200 hover:bg-slate-300 dark:bg-slate-600 dark:hover:bg-slate-500 text-slate-700 dark:text-slate-200 font-medium py-2 px-4 rounded-lg shadow hover:shadow-md transition-all">
+          Batal
+        </a>
+        <button type="submit"
+                class="btn-primary bg-sky-500 hover:bg-sky-600 text-white font-medium py-2 px-4 rounded-lg shadow-md hover:shadow-lg transition-all transform hover:scale-105">
+          Simpan Data Guru
+        </button>
+      </div>
+    </form>
+  </div>
+</AdminLayout>
+
+<script>
+// Script untuk menghilangkan alert error setelah beberapa detik
+document.addEventListener('astro:page-load', () => {
+  const errorAlert = document.getElementById('error-alert');
+  if (errorAlert) {
+     setTimeout(() => {
+      errorAlert.style.transition = 'opacity 0.5s ease';
+      errorAlert.style.opacity = '0';
+      setTimeout(() => errorAlert.remove(), 500);
+    }, 7000); // Hilang setelah 7 detik
+  }
+});
+</script>

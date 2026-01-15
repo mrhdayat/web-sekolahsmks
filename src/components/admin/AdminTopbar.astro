@@ -1,0 +1,166 @@
+---
+// src/components/admin/AdminTopbar.astro
+import ThemeToggle from '@components/ThemeToggle.astro'; // Menggunakan ThemeToggle yang sudah ada
+import { supabase } from '@lib/supabase';
+
+let userEmail: string | null | undefined = null;
+
+// Coba ambil email user dari session Supabase (client-side)
+// Ini hanya akan jalan di client-side setelah hidrasi.
+// Untuk SSR, kita perlu cara lain (misal dari cookies jika session diambil di middleware)
+// Atau, kita bisa juga tidak menampilkan email jika tidak ada.
+
+// Tombol Logout akan ada di sini.
+// Logika logout akan menggunakan Supabase client-side.
+---
+<header class="sticky top-0 bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 z-30">
+  <div class="px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-16 -mb-px">
+      <!-- Tombol Toggle Sidebar untuk Mobile -->
+      <div class="flex md:hidden">
+        <button
+          id="admin-sidebar-toggle"
+          class="text-slate-500 hover:text-slate-600 dark:text-slate-400 dark:hover:text-slate-300"
+          aria-controls="admin-sidebar"
+          aria-expanded="false"
+        >
+          <span class="sr-only">Buka sidebar</span>
+          <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <rect x="4" y="5" width="16" height="2"></rect>
+            <rect x="4" y="11" width="16" height="2"></rect>
+            <rect x="4" y="17" width="16" height="2"></rect>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Spacer untuk mendorong item ke kanan -->
+      <div class="flex-1"></div>
+
+      <!-- Items di Kanan Topbar -->
+      <div class="flex items-center space-x-3">
+        <ThemeToggle client:load />
+        <div class="relative inline-flex" data-headlessui-state="">
+          <button id="user-menu-button" class="inline-flex justify-center items-center group">
+            <img class="w-8 h-8 rounded-full" src="/images/placeholders/default-avatar.png" width="32" height="32" alt="User">
+            <div class="flex items-center truncate">
+              <span id="user-email-display" class="truncate ml-2 text-sm font-medium text-slate-600 dark:text-slate-300 group-hover:text-slate-800 dark:group-hover:text-slate-200">
+                Admin User
+              </span>
+              <svg class="w-3 h-3 shrink-0 ml-1 fill-current text-slate-400" viewBox="0 0 12 12">
+                <path d="M5.9 6.9L.2 1.2l1.4-1.4L7.3 5.5z"></path>
+                <path d="M7.3 5.5L5.9 6.9l5.7 5.7L13 11.2z"></path>
+              </svg>
+            </div>
+          </button>
+          <!-- Dropdown Menu (Hidden by default) -->
+          <div id="user-menu-dropdown" class="origin-top-right z-10 absolute top-full right-0 min-w-[11rem] bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 py-1.5 rounded shadow-lg overflow-hidden mt-1 hidden">
+            <div class="pt-0.5 pb-2 px-3 mb-1 border-b border-slate-200 dark:border-slate-600">
+              <div class="font-medium text-slate-800 dark:text-slate-100">SMKS Muh Satui</div>
+              <div id="user-email-dropdown" class="text-xs text-slate-500 dark:text-slate-400 italic">Admin</div>
+            </div>
+            <ul>
+              <li>
+                <a class="font-medium text-sm text-sky-500 hover:text-sky-600 dark:hover:text-sky-400 flex items-center py-1 px-3" href="#0" onclick="event.preventDefault(); document.getElementById('logout-button').click();">
+                  Sign Out
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <button id="logout-button" class="hidden">Logout</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<script>
+  // User Menu Dropdown Toggle
+  const userMenuButton = document.getElementById('user-menu-button');
+  const userMenuDropdown = document.getElementById('user-menu-dropdown');
+  const userEmailDisplay = document.getElementById('user-email-display');
+  const userEmailDropdown = document.getElementById('user-email-dropdown');
+
+  if (userMenuButton && userMenuDropdown) {
+    userMenuButton.addEventListener('click', (event) => {
+      event.stopPropagation();
+      userMenuDropdown.classList.toggle('hidden');
+    });
+    document.addEventListener('click', (event) => {
+      if (!userMenuButton.contains(event.target) && !userMenuDropdown.contains(event.target)) {
+        userMenuDropdown.classList.add('hidden');
+      }
+    });
+  }
+
+  // Supabase Auth state and Logout
+  // Dijalankan di client-side
+  const supabaseInstance = window.supabase; // Asumsi supabase client ada di window object dari @lib/supabase
+
+  async function handleAuthStateChange(event, session) {
+    if (session && session.user) {
+      if(userEmailDisplay) userEmailDisplay.textContent = session.user.email || 'Admin';
+      if(userEmailDropdown) userEmailDropdown.textContent = session.user.email || 'Admin';
+    } else {
+      // Jika tidak ada session, redirect ke login
+      // Ini sebagai fallback jika middleware tidak menangkap
+      if (window.location.pathname !== '/admin/login' && window.location.pathname.startsWith('/admin')) {
+        // window.location.href = '/admin/login';
+      }
+    }
+  }
+
+  if (supabaseInstance) {
+    // Panggil sekali untuk set email awal jika sudah ada session
+    supabaseInstance.auth.getSession().then(({ data: { session } }) => {
+      if (session) {
+         handleAuthStateChange('INITIAL_SESSION', session);
+      } else {
+        // Jika tidak ada session awal dan kita bukan di halaman login, redirect.
+        // Ini untuk kasus di mana cookie mungkin ada tapi session client Supabase belum valid.
+        // Atau jika cookie dihapus manual.
+         if (window.location.pathname !== '/admin/login' && window.location.pathname.startsWith('/admin')) {
+            // window.location.href = '/admin/login';
+         }
+      }
+    });
+
+    // Listener untuk perubahan state auth
+    const { data: authListener } = supabaseInstance.auth.onAuthStateChange(handleAuthStateChange);
+
+    // Logout logic
+    const logoutButton = document.getElementById('logout-button');
+    if (logoutButton) {
+      logoutButton.addEventListener('click', async () => {
+        const { error } = await supabaseInstance.auth.signOut();
+        if (error) {
+          console.error('Error logging out:', error.message);
+        } else {
+          // Hapus cookies session secara manual (best effort)
+          // document.cookie = 'sb-access-token=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+          // document.cookie = 'sb-refresh-token=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+          // Redirect ke halaman login setelah logout
+          // Astro akan melakukan redirect via middleware atau halaman jika cookie tidak ada
+           window.location.href = '/admin/login'; // Forcer redirect client side
+        }
+      });
+    }
+  } else {
+    // console.warn("Supabase client not found for AdminTopbar auth handling.");
+    // Jika Supabase tidak ada, dan kita bukan di login, redirect.
+    if (window.location.pathname !== '/admin/login' && window.location.pathname.startsWith('/admin')) {
+        // window.location.href = '/admin/login';
+    }
+  }
+
+  // Hapus listener saat komponen di-unmount (jika Astro mendukung lifecycle hook ini di client:load)
+  // document.addEventListener('astro:before-swap', () => {
+  //   if (authListener && typeof authListener.unsubscribe === 'function') {
+  //     authListener.unsubscribe();
+  //   }
+  // }, { once: true });
+
+</script>
+
+<style>
+/* Styling tambahan untuk topbar jika perlu */
+</style>

@@ -1,0 +1,51 @@
+---
+// src/components/Lightbox.astro
+// Komponen ini hanya struktur HTML dan CSS. Logika JS akan ada di script global atau halaman galeri.
+---
+<div
+  id="lightbox-modal"
+  class="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-[9999] hidden p-4 animate-fade-in"
+  data-state="closed"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="lightbox-caption"
+  tabindex="-1"
+>
+  <div class="relative max-w-3xl max-h-[90vh] w-full">
+    <img id="lightbox-image" src="" alt="Lightbox Image" class="block max-w-full max-h-[80vh] mx-auto rounded-lg shadow-xl object-contain transition-transform duration-300 scale-95 opacity-0"/>
+    <button id="lightbox-close" title="Tutup" aria-label="Tutup lightbox" class="absolute -top-2 -right-2 md:top-2 md:right-2 text-white bg-slate-800/50 hover:bg-sky-500 rounded-full p-2 transition-colors">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </button>
+    <button id="lightbox-prev" title="Gambar sebelumnya" aria-label="Gambar sebelumnya" class="absolute left-0 md:-left-12 top-1/2 -translate-y-1/2 text-white bg-slate-800/50 hover:bg-sky-500 rounded-full p-2 transition-colors">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+      </svg>
+    </button>
+    <button id="lightbox-next" title="Gambar berikutnya" aria-label="Gambar berikutnya" class="absolute right-0 md:-right-12 top-1/2 -translate-y-1/2 text-white bg-slate-800/50 hover:bg-sky-500 rounded-full p-2 transition-colors">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+      </svg>
+    </button>
+  </div>
+  <p id="lightbox-caption" class="text-white text-center mt-3 text-sm absolute bottom-5 left-1/2 -translate-x-1/2 bg-black/30 px-2 py-1 rounded"></p>
+</div>
+
+<style>
+  #lightbox-modal.hidden {
+    display: none;
+  }
+  #lightbox-modal[data-state="open"] #lightbox-image {
+    transform: scale(1);
+    opacity: 1;
+  }
+  /* Animasi fade-in sudah ada di tailwind.config atau global.css */
+</style>
+
+<script>
+// Dipindahkan ke galeri.astro atau skrip global
+// document.addEventListener('astro:page-load', () => {
+//   // ... logika lightbox ...
+// });
+</script>

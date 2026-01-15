@@ -1,0 +1,173 @@
+---
+import Layout from '@layouts/Layout.astro';
+import AnimatedSection from '@components/AnimatedSection.astro';
+import Card from '@components/Card.astro'; // Akan dibuat nanti
+
+// Data Program Keahlian (sementara, nanti bisa dari Supabase)
+const programKeahlian = [
+  {
+    id: 'tkj',
+    nama: 'Teknik Komputer dan Jaringan (TKJ)',
+    deskripsi: 'Mempelajari perakitan komputer, instalasi sistem operasi, administrasi jaringan, keamanan siber, dan teknologi cloud computing. Lulusan siap menjadi teknisi komputer, administrator jaringan, atau network engineer.',
+    icon: 'computer-desktop', // Placeholder icon name
+    image: '/images/placeholders/program-tkj.jpg', // Ganti dengan path gambar yang sesuai
+    color: 'sky' // Untuk theming card
+  },
+  {
+    id: 'akl',
+    nama: 'Akuntansi dan Keuangan Lembaga (AKL)',
+    deskripsi: 'Fokus pada pencatatan transaksi keuangan, penyusunan laporan keuangan, analisis keuangan, perpajakan, dan aplikasi komputer akuntansi. Lulusan dapat bekerja sebagai staf akuntansi, auditor junior, atau kasir.',
+    icon: 'calculator',
+    image: '/images/placeholders/program-akl.jpg',
+    color: 'emerald'
+  },
+  {
+    id: 'mplb',
+    nama: 'Manajemen Perkantoran dan Layanan Bisnis (MPLB)',
+    deskripsi: 'Mengembangkan keterampilan dalam pengelolaan administrasi perkantoran, kearsipan, komunikasi bisnis, layanan pelanggan, dan penggunaan teknologi perkantoran modern. Cocok untuk karir sebagai sekretaris, staf administrasi, atau customer service.',
+    icon: 'briefcase',
+    image: '/images/placeholders/program-mplb.jpg',
+    color: 'amber'
+  },
+  // Tambahkan program keahlian lain jika ada
+];
+
+// Data Fasilitas (sementara)
+const fasilitas = [
+  { name: "Laboratorium Komputer TKJ", description: "Dilengkapi PC spek terbaru dan perangkat jaringan.", icon: "chip" },
+  { name: "Laboratorium Akuntansi", description: "Software akuntansi terkini dan ruang praktik.", icon: "banknotes" },
+  { name: "Ruang Praktik Perkantoran", description: "Peralatan kantor modern untuk simulasi kerja.", icon: "printer" },
+  { name: "Perpustakaan", description: "Koleksi buku lengkap dan ruang baca nyaman.", icon: "book-open" },
+  { name: "Lapangan Olahraga", description: "Fasilitas basket, voli, dan futsal.", icon: "trophy" },
+  { name: "Masjid Sekolah", description: "Tempat ibadah dan kegiatan keagamaan.", icon: "building-storefront" }, // Ganti icon
+];
+
+// Data Ekstrakurikuler (sementara)
+const ekstrakurikuler = [
+    { name: "Pramuka", icon: "fire" },
+    { name: "Paskibra", icon: "flag" },
+    { name: "Tapak Suci (Pencak Silat)", icon: "shield-halved" }, // Ganti icon
+    { name: "Futsal", icon: "futbol" }, // Ganti icon
+    { name: "Basket", icon: "basketball" }, // Ganti icon
+    { name: "English Club", icon: "language" },
+    { name: "Rohis (Rohani Islam)", icon: "moon-stars" }, // Ganti icon
+    { name: "Jurnalistik Sekolah", icon: "newspaper" },
+];
+
+// Membuat direktori placeholder untuk gambar
+const placeholderImageDir = "public/images/placeholders";
+// Tidak bisa membuat direktori langsung, jadi akan membuat file di dalamnya
+---
+
+<Layout title="Program & Fasilitas">
+  <section class="py-12 md:py-20 bg-sky-50 dark:bg-slate-800">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+      <AnimatedSection animationType="fade-up">
+        <h1 class="text-4xl md:text-5xl font-bold text-center text-sky-600 dark:text-sky-400 mb-12" transition:name="page-title-program">
+          Program Keahlian Unggulan
+        </h1>
+        <p class="text-center text-lg text-slate-600 dark:text-slate-300 max-w-2xl mx-auto mb-16">
+          Kami menawarkan berbagai program keahlian yang dirancang untuk memenuhi kebutuhan industri dan mempersiapkan siswa menjadi tenaga profesional yang kompeten.
+        </p>
+      </AnimatedSection>
+
+      <div class="grid md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8 md:gap-10">
+        {programKeahlian.map((prog, index) => (
+          <AnimatedSection animationType="zoom-in" delay={index * 150}>
+            <Card
+              title={prog.nama}
+              description={prog.deskripsi}
+              imageUrl={prog.image}
+              imageAlt={`Ilustrasi ${prog.nama}`}
+              tags={[`${prog.id.toUpperCase()}`]}
+              themeColor={prog.color}
+              className="h-full flex flex-col"
+            >
+              <div class="mt-auto pt-4">
+                <a href={`/program/${prog.id}`} class={`inline-block bg-${prog.color}-500 hover:bg-${prog.color}-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-300 transform hover:scale-105`}>
+                  Selengkapnya
+                </a>
+              </div>
+            </Card>
+          </AnimatedSection>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="py-12 md:py-20 bg-white dark:bg-slate-700">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+      <AnimatedSection animationType="fade-up">
+        <h2 class="text-3xl md:text-4xl font-bold text-center text-slate-800 dark:text-slate-100 mb-12">
+          Fasilitas Pendukung
+        </h2>
+      </AnimatedSection>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+        {fasilitas.map((item, index) => (
+          <AnimatedSection animationType="fade-up" delay={index * 100}>
+            <div class="bg-slate-50 dark:bg-slate-600 p-6 rounded-xl shadow-lg hover:shadow-sky-200/50 dark:hover:shadow-sky-700/50 transition-shadow duration-300 transform hover:-translate-y-1 h-full">
+              <div class={`text-${programKeahlian[index % programKeahlian.length].color}-500 dark:text-${programKeahlian[index % programKeahlian.length].color}-400 mb-3`}>
+                {/* Placeholder Icon, ganti dengan SVG atau library ikon */}
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8">
+                  { item.icon === "chip" && <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 3v1.5M4.5 8.25H3m18 0h-1.5M4.5 12H3m18 0h-1.5m-15 3.75H3m18 0h-1.5M8.25 19.5V21M12 3v1.5m0 15V21m3.75-18v1.5m0 15V21m-9-7.5h12V6H6v12z" /> }
+                  { item.icon === "banknotes" && <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6A.75.75 0 012.25 5.25V4.5m0 13.5V18a.75.75 0 00-.75.75c0 .414.336.75.75.75h16.5c.414 0 .75-.336.75-.75V18a.75.75 0 00-.75-.75h-1.5m-16.5 0H2.25m16.5 0c.621 0 1.125-.504 1.125-1.125V6.75c0-.621-.504-1.125-1.125-1.125H3.75c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125z" /> }
+                  { item.icon === "printer" && <path stroke-linecap="round" stroke-linejoin="round" d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0110.56 0m-10.56 0L6 18.25M3.75 12H3m18 0h-.75m-16.5 0H3.75m16.5 0h.75M12 17.25h.008v.008H12v-.008zm0 0H12m0-10.5H12M12 6.75v.008H12V6.75zm0 0h.008v10.5h-.008V6.75z" /> }
+                  { item.icon === "book-open" && <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" /> }
+                  { item.icon === "trophy" && <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 18.75h-9m9 0a3 3 0 013 3h-15a3 3 0 013-3m9 0v-4.5M3.75 14.25A3 3 0 01.75 11.25v-1.5A3 3 0 013.75 6.75H6v7.5H3.75zm16.5 0A3 3 0 0023.25 11.25v-1.5A3 3 0 0020.25 6.75H18v7.5h2.25z" /> }
+                  { item.icon === "building-storefront" && <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 21V10.747M13.5 10.747C13.528 10.736 13.5 10.718 13.5 10.688V9.75c0-.414.336-.75.75-.75h1.5c.414 0 .75.336.75.75v.938c0 .03-.028.048-.001.059M13.5 10.747MM13.5 10.747C13.219 10.696 12.878 10.5 12 10.5c-.878 0-1.219.196-1.5.247M13.5 10.747M10.5 21V10.747m0 0c-.028.011 0 .029-.001.059V9.75c0-.414-.336-.75-.75-.75h-1.5c-.414 0-.75.336-.75.75v.938c0 .03.028.048.001.059m0 0C10.781 10.696 11.122 10.5 12 10.5c.878 0 1.219.196 1.5.247m0 0M3 9.75A2.25 2.25 0 015.25 7.5h13.5A2.25 2.25 0 0121 9.75v10.5A2.25 2.25 0 0118.75 22.5H5.25A2.25 2.25 0 013 20.25V9.75z" /> }
+                </svg>
+              </div>
+              <h3 class="text-xl font-semibold text-slate-800 dark:text-slate-200 mb-2">{item.name}</h3>
+              <p class="text-slate-600 dark:text-slate-300 text-sm">{item.description}</p>
+            </div>
+          </AnimatedSection>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="py-12 md:py-20 bg-sky-50 dark:bg-slate-800">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+      <AnimatedSection animationType="fade-up">
+        <h2 class="text-3xl md:text-4xl font-bold text-center text-sky-600 dark:text-sky-400 mb-12">
+          Ekstrakurikuler Pilihan
+        </h2>
+      </AnimatedSection>
+      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6">
+        {ekstrakurikuler.map((item, index) => (
+          <AnimatedSection animationType="zoom-in" delay={index * 100}>
+            <div class="bg-white dark:bg-slate-700 p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 text-center">
+               <div class={`text-amber-500 dark:text-amber-400 mb-2 inline-block`}> {/* Ganti warna jika perlu */}
+                {/* Placeholder Icon */}
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10 mx-auto">
+                  { item.icon === "fire" && <path stroke-linecap="round" stroke-linejoin="round" d="M15.362 5.214A8.252 8.252 0 0112 21 8.25 8.25 0 016.038 7.048l2.402.961A6.75 6.75 0 0012 19.5a6.75 6.75 0 005.063-2.287l2.402-.961zM12 2.25A2.25 2.25 0 009.75 4.5v4.94A2.25 2.25 0 0012 11.75a2.25 2.25 0 002.25-2.25V4.5A2.25 2.25 0 0012 2.25z" /> }
+                  { item.icon === "flag" && <path stroke-linecap="round" stroke-linejoin="round" d="M3 3v1.5M3 21v-6M21 3l-6 6-4-4-6 6v1.5M21 21V10.5M12 6.75v12.75" /> }
+                  { item.icon === "shield-halved" && <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.75c0 5.592 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.57-.598-3.75h-.152c-3.196 0-6.1-1.248-8.25-3.286zm0 0A11.953 11.953 0 0112 2.25c1.417 0 2.773.27 4.002.75m-8.25 3.286c2.15 2.038 5.054 3.286 8.25 3.286h.152c.388 1.18.598 2.44.598 3.75 0 5.592-3.824 10.29-9 11.622-5.176-1.332-9-6.03-9-11.622 0-1.31.21-2.57.598-3.75M12 5.25v7.5m3-3.75H9" /> }
+                  { item.icon === "futbol" && <path stroke-linecap="round" stroke-linejoin="round" d="M12.75 9.75L11.25 12l1.5 2.25m-3-4.5L8.25 12l1.5 2.25m4.5-4.5l-1.5 2.25 1.5 2.25M12 21a9 9 0 100-18 9 9 0 000 18z" /> }
+                  { item.icon === "basketball" && <path stroke-linecap="round" stroke-linejoin="round" d="M12 9.75L13.875 12L12 14.25m2.625-4.5L16.5 12l-1.875 2.25M12 21a9 9 0 100-18 9 9 0 000 18zM3.375 7.5c-.907.086-1.82.278-2.75.562m19.75-.562c.93.284 1.843.476 2.75.562M5.25 16.5c-.907-.086-1.82-.278-2.75-.562M18.75 16.5c.93-.284 1.843-.476 2.75-.562" /> }
+                  { item.icon === "language" && <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 21l5.25-11.25L21 21m-9-3H7.5A2.25 2.25 0 015.25 15.75V9A2.25 2.25 0 017.5 6.75h7.5A2.25 2.25 0 0117.25 9v6.75A2.25 2.25 0 0115 18m-3-3V9" /> }
+                  { item.icon === "moon-stars" && <path stroke-linecap="round" stroke-linejoin="round" d="M12 3c.132 0 .263 0 .393.016M12 3c-.132 0-.263 0-.393.016m0 0A6.965 6.965 0 0112 2.25a6.965 6.965 0 017.984 5.888c.087.418.14.841.167 1.273M12 3c.132 0 .263 0 .393.016M12 3c-.132 0-.263 0-.393.016M7.5 9.75h.008v.008H7.5V9.75zm4.5-.75a.75.75 0 100-1.5.75.75 0 000 1.5zm2.625 2.625a.75.75 0 100-1.5.75.75 0 000 1.5zm0 0A3.003 3.003 0 0112 15a3.003 3.003 0 01-2.625-1.375m2.625-1.25a.375.375 0 11-.75 0 .375.375 0 01.75 0z" /> } {/* Simplified */}
+                  { item.icon === "newspaper" && <path stroke-linecap="round" stroke-linejoin="round" d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 01-2.25 2.25H5.625a2.25 2.25 0 01-2.25-2.25V18m12.75-3h.008v.008H18.75V15zm0 2.25h.008v.008H18.75v-.008zm0 2.25h.008v.008H18.75V19.5zm-15-3.375A2.25 2.25 0 014.5 13.5H18V9.75A2.25 2.25 0 0015.75 7.5H4.5A2.25 2.25 0 002.25 9.75v3.375c0 .621.504 1.125 1.125 1.125z" /> }
+                </svg>
+              </div>
+              <h4 class="text-md font-semibold text-slate-700 dark:text-slate-200">{item.name}</h4>
+            </div>
+          </AnimatedSection>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  {/* Placeholder untuk gambar agar direktori dibuat */}
+  <Fragment set:html={`
+    <div style="display:none;">
+      <img src="/images/placeholders/program-tkj.jpg" alt="placeholder">
+      <img src="/images/placeholders/program-akl.jpg" alt="placeholder">
+      <img src="/images/placeholders/program-mplb.jpg" alt="placeholder">
+    </div>
+  `} />
+</Layout>
+
+<style>
+  /* Specific styles for program page if needed */
+</style>
